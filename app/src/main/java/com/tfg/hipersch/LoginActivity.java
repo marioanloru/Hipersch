@@ -3,6 +3,7 @@ package com.tfg.hipersch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Patterns;
@@ -73,8 +74,8 @@ public class LoginActivity extends AppCompatActivity {
         _registerMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext());
-                //startActivityForResult(intent, REQUEST_SIGNUP);
+                Intent intent = new Intent(v.getContext(), SignUpActivity.class);
+                startActivity(intent);
             }
         });
     }

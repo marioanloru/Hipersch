@@ -4,4 +4,7 @@
     <string name="login_password">Password</string>
     <string name="login_register">No account yet? Create  one</string>
     <string name="login_button">Login</string>
+    <string name="signup_button">Sign up</string>
+    <string name="signup_height">Height</string>
+    <string name="signup_weight">Weight</string>
 </resources>
