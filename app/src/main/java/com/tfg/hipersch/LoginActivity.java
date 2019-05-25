@@ -26,12 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "hipersch.LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
     private boolean emailVisited = false;
     private boolean passwordVisited = false;
-    private boolean loading = false;
-    private boolean showPassword = false;
     @BindView(R.id.email_field) TextInputEditText _emailText;
     @BindView(R.id.email_layout) TextInputLayout _emailLayout;
     @BindView(R.id.password) TextInputEditText _passwordText;
