@@ -7,4 +7,14 @@
     <string name="signup_button">Sign up</string>
     <string name="signup_height">Height</string>
     <string name="signup_weight">Weight</string>
+    <string name="signup_email">Email</string>
+    <string name="singup_password">password</string>
+    <string name="signup_password_confirm">Confirm your password</string>
+    <string name="signup_name">Name</string>
+    <string name="singup_gender">Gender</string>
+    <string name="signup_gender_male">Male</string>
+    <string name="signup_gender_female">Female</string>
+    <string name="signup_password">Password</string>
+    <string name="signup_next">Next</string>
+    <string name="signup_finish">Finish</string>
 </resources>

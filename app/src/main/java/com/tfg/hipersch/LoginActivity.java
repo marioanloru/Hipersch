@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,9 +21,12 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "hipersch.LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     private boolean emailVisited = false;
     private boolean passwordVisited = false;
@@ -67,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                login(v);
             }
         });
 
@@ -80,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public void login() {
+    public void login(View v) {
         if (!validate()) {
             onLoginFailed();
             hideProgress();
@@ -93,15 +97,40 @@ public class LoginActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
+        //  Login
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.userLogin(email, password);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse apiResponse = response.body();
+                    onLoginSuccess(v, apiResponse);
+                } else {
+                    onLoginFailed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                onLoginFailed();
+            }
+        });
+
     }
 
-    public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
-        finish();
+    public void onLoginSuccess(View v, ApiResponse response) {
+        TokenSaver.setToken(v.getContext(),response.getToken());
+        Intent intent = new Intent(v.getContext(), MainActivity.class);
+        startActivity(intent);
+
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Please, check login fields", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Wrong credentials", Toast.LENGTH_LONG).show();
+        hideProgress();
         _loginButton.setEnabled(true);
     }
 
