@@ -2,15 +2,11 @@ package com.tfg.hipersch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        checkApiStatus();
     }
 
     public void login(View v) {
@@ -104,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                     ApiResponse apiResponse = response.body();
                     onLoginSuccess(v, apiResponse);
                 } else {
-                    onLoginFailed();
+                    onLoginCredentialsFailure();
                 }
             }
 
@@ -118,13 +117,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess(View v, ApiResponse response) {
-        TokenSaver.setToken(v.getContext(),response.getToken());
+        TokenManager.setToken(v.getContext(),response.getToken());
         Intent intent = new Intent(v.getContext(), MainActivity.class);
         startActivity(intent);
 
     }
 
     public void onLoginFailed() {
+        Toast.makeText(getBaseContext(), "Please, try again in a few seconds", Toast.LENGTH_LONG).show();
+        hideProgress();
+        _loginButton.setEnabled(true);
+    }
+
+    public void onLoginCredentialsFailure() {
         Toast.makeText(getBaseContext(), "Wrong credentials", Toast.LENGTH_LONG).show();
         hideProgress();
         _loginButton.setEnabled(true);
@@ -188,5 +193,22 @@ public class LoginActivity extends AppCompatActivity {
     public void hideProgress() {
         _progressBar.setVisibility(View.INVISIBLE);
         _registerMessage.setVisibility(View.VISIBLE);
+    }
+
+    public void checkApiStatus() {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.getApiStatus();
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                System.out.println("Api response received");
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+            }
+        });
     }
 }

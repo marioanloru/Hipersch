@@ -5,16 +5,24 @@
     <string name="login_register">No account yet? Create  one</string>
     <string name="login_button">Login</string>
     <string name="signup_button">Sign up</string>
-    <string name="signup_height">Height</string>
-    <string name="signup_weight">Weight</string>
+    <string name="signup_height">Height in cm</string>
+    <string name="signup_weight">Weight in kg</string>
     <string name="signup_email">Email</string>
     <string name="singup_password">password</string>
     <string name="signup_password_confirm">Confirm your password</string>
     <string name="signup_name">Name</string>
+    <string name="signup_lastname">Lastname</string>
     <string name="singup_gender">Gender</string>
     <string name="signup_gender_male">Male</string>
     <string name="signup_gender_female">Female</string>
     <string name="signup_password">Password</string>
     <string name="signup_next">Next</string>
     <string name="signup_finish">Finish</string>
+    <string name="signup_role_athlete">Athlete</string>
+    <string name="signup_role_trainer">Trainer</string>
+    <string name="signup_role">Role:</string>
+    <string name="menu_schedule">Schedule</string>
+    <string name="menu_tasks">Tasks</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_statistics">Statistics</string>
 </resources>
