@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/CustomTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ScheduleActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -26,10 +27,9 @@
         <activity
             android:name=".SignUpActivity"
             android:parentActivityName=".LoginActivity" />
-
-        <activity android:name=".SignUpPersonalActivity"
-            android:parentActivityName=".SignUpActivity"
-            ></activity>
+        <activity
+            android:name=".SignUpPersonalActivity"
+            android:parentActivityName=".SignUpActivity" />
     </application>
 
 </manifest>

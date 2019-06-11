@@ -17,23 +17,27 @@ import butterknife.ButterKnife;
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     public static final String NAME = "hipersch.NAME";
+    public static final String LASTNAME = "hipersch.LASTNAME";
     public static final String EMAIL = "hipersch.EMAIL";
     public static final String PASSWORD = "hipersch.PASSWORD";
 
     private boolean nameVisited = false;
+    private boolean lastnameVisited = false;
     private boolean emailVisited = false;
     private boolean passwordVisited = false;
     private boolean passwordConfirmVisited = false;
 
     @BindView(R.id.name_layout) TextInputLayout _nameLayout;
     @BindView(R.id.name_field) TextInputEditText _nameText;
+    @BindView(R.id.lastname_layout) TextInputLayout _lastnameLayout;
+    @BindView(R.id.lastname_field) TextInputEditText _lastnameText;
     @BindView(R.id.email_layout) TextInputLayout _emailLayout;
     @BindView(R.id.email_field) TextInputEditText _emailText;
     @BindView(R.id.password_layout) TextInputLayout _passwordLayout;
     @BindView(R.id.password) TextInputEditText _passwordText;
     @BindView(R.id.password_confirm_layout) TextInputLayout _passwordConfirmLayout;
     @BindView(R.id.password_confirm) TextInputEditText _passwordConfirmText;
-    @BindView(R.id.next_button) MaterialButton _nextButton;
+    @BindView(R.id.finish_button) MaterialButton _nextButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,16 @@ public class SignUpActivity extends AppCompatActivity {
                     if (!nameVisited) nameVisited = true;
                 } else {
                     if (nameVisited) validateName();
+                }
+            }
+        });
+        _lastnameText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    if (!lastnameVisited) lastnameVisited = true;
+                } else {
+                    if (lastnameVisited) validateLastName();
                 }
             }
         });
@@ -100,20 +114,31 @@ public class SignUpActivity extends AppCompatActivity {
     public void next(View v) {
         Intent intent = new Intent(v.getContext(), SignUpPersonalActivity.class);
         String name = _nameText.getText().toString();
+        String lastname = _lastnameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         intent.putExtra(NAME, name);
+        intent.putExtra(LASTNAME, lastname);
         intent.putExtra(EMAIL, email);
         intent.putExtra(PASSWORD, password);
         startActivity(intent);
     }
 
     public boolean validate() {
+        boolean validName = validateName();
+        System.out.println("Name validation: " + validName);
+        boolean validLastname = validateLastName();
+        System.out.println("lastname validation: " + validLastname);
         boolean validEmail = validateEmail();
+        System.out.println("email validation: " + validEmail);
         boolean validPassword = validatePassword();
+        System.out.println("password validation: " + validPassword);
         boolean validPasswordConfirm = validatePasswordConfirm();
 
-        return validEmail && validPassword && validPasswordConfirm;
+
+        System.out.println("password confirm validation: " + validPasswordConfirm);
+
+        return validName && validLastname && validEmail && validPassword && validPasswordConfirm;
     }
 
     public boolean validateName() {
@@ -129,6 +154,21 @@ public class SignUpActivity extends AppCompatActivity {
 
         return valid;
     }
+
+    public boolean validateLastName() {
+        boolean valid = true;
+        String lastname = _lastnameText.getText().toString();
+
+        if (lastname.isEmpty()) {
+            _lastnameLayout.setError("This field cannot be empty");
+            valid = false;
+        } else {
+            _lastnameLayout.setError(null);
+        }
+
+        return valid;
+    }
+
     public boolean validateEmail() {
         boolean valid = true;
         String email = _emailText.getText().toString();

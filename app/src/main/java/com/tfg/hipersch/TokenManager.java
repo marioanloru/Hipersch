@@ -3,7 +3,7 @@ package com.tfg.hipersch;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class TokenSaver {
+public class TokenManager {
     public final static String SHARED_PREF_NAME = "hipersch.SHARED_PREF";
     public final static String TOKEN_KEY = "hipersch.TOKEN_KEY";
 

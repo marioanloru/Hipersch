@@ -1,25 +1,39 @@
 package com.tfg.hipersch;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.TextView;
+import android.view.MenuItem;
+
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
-    private int height;
-    private int bodyWeight;
-    private double bodyMassIndex;
+public class MainActivity extends AppCompatActivity
+        implements ScheduleFragment.OnFragmentInteractionListener,
+        StatisticsFragment.OnFragmentInteractionListener,
+        TasksFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener {
 
-    @BindView(R.id.height) TextView _height;
-    @BindView(R.id.weight) TextView _weight;
-    @BindView(R.id.bmi) TextView _bmi;
+    public final static String SHARED_PREF_NAME = "hipersch.SHARED_PREF";
+    public final static String CURRENT_MODE_KEY = "hipersch.CURRENT_MODE";
+
+    @BindView(R.id.bottom_navigation) BottomNavigationView _bottomNavigation;
+    @BindView(R.id.navigation_schedule) BottomNavigationItemView _navigationSchedule;
+    @BindView(R.id.navigation_tasks) BottomNavigationItemView _navigationTasks;
+    @BindView(R.id.navigation_profile) BottomNavigationItemView _navigationProfile;
+    @BindView(R.id.navigation_statistics) BottomNavigationItemView _navigationStatistics;
+    @BindView(R.id.currentModeGroup) MaterialButtonToggleGroup _currentModeGroup;
+    @BindView(R.id.cyclingButtom) MaterialButton _cyclingButtom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,45 +42,114 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //  get token from app shared info
+        showMainFragment();
+
         System.out.println("Getting user info");
-        getUserData(TokenManager.getToken(this).toString());
-    }
+        //  getUserData(TokenManager.getToken(this).toString());
 
-    public void getUserData(String token) {
-        ApiService apiService = ServiceGenerator.createService(ApiService.class);
-        Call<ApiResponse> call = apiService.getUserData("Bearer " + token);
+        _currentModeGroup.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
+             @Override
+             public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+                 switch (checkedId) {
+                     case R.id.cyclingButtom:
+                         setCurrentMode("cycling", isChecked);
+                         break;
+                     case R.id.runningButtom:
+                         setCurrentMode("running", isChecked);
+                         break;
+                     case R.id.swimmingButtom:
+                         setCurrentMode("swimming", isChecked);
+                         break;
+                 }
 
-        call.enqueue(new Callback<ApiResponse>() {
+                 getCurrentMode();
+             }
+         });
+
+        _bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("RestrictedApi")
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    ApiResponse apiResponse = response.body();
-                    System.out.println("Respuesta de la api!!: " + apiResponse);
-                    addUserDataParameters(apiResponse);
-                    //onLoginSuccess(v, apiResponse);
-                } else {
-                    System.out.println("-----------Ha fallado " + response.body());
-                    //onLoginFailed();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_schedule:
+                        ScheduleFragment scheduleFragment = new ScheduleFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentContainer, scheduleFragment)
+                                .commit();
+                        setActivityTitle("Schedule");
+                        break;
+
+                    case R.id.navigation_tasks:
+                        TasksFragment tasksFragment = new TasksFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentContainer, tasksFragment)
+                                .commit();
+                        setActivityTitle("Tasks");
+                        break;
+
+                    case R.id.navigation_profile:
+                        ProfileFragment profileFragment = new ProfileFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentContainer, profileFragment)
+                                .commit();
+                        setActivityTitle("Profile");
+                        break;
+
+                    case R.id.navigation_statistics:
+                        StatisticsFragment statisticsFragment = new StatisticsFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentContainer, statisticsFragment)
+                                .commit();
+                        setActivityTitle("Statistics");
+                        break;
                 }
+
+                return true;
             }
 
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("Error:", t.getMessage());
-                System.out.println("--------------- erroooor");
-                //onLoginFailed();
-            }
         });
     }
 
+
+    public void showMainFragment() {
+        ProfileFragment fragment = new ProfileFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .commit();
+        getSupportActionBar().setTitle("Profile");
+    }
+
+    public void setCurrentMode(String mode, boolean isChecked) {
+        if (isChecked) {
+            SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(CURRENT_MODE_KEY, mode);
+            editor.apply();
+        }
+    }
+
+    public void setActivityTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    public void getCurrentMode() {
+        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    public String getSharedPrefName() {
+        return SHARED_PREF_NAME;
+    }
+
+    public String getCurrentModeKey() {
+        return CURRENT_MODE_KEY;
+    }
     @Override
     public void onBackPressed() {
         // Do nothing on back pressed at main activity
     }
 
-    public void addUserDataParameters(ApiResponse response) {
-        _height.setText(Integer.toString(response.getHeight()));
-        _weight.setText(Integer.toString(response.getBodyWeight()));
-        _bmi.setText(Double.toString(response.getBodyMassIndex()));
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
