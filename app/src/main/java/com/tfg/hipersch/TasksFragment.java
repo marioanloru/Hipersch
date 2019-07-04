@@ -7,14 +7,26 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -35,12 +47,16 @@ public class TasksFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String currentMode;
+    private String cyclingTestSelected;
+
     private OnFragmentInteractionListener mListener;
 
-    @BindView(R.id.firstButton) MaterialButton _firstButton;
-    @BindView(R.id.secondButton) MaterialButton _secondButton;
-    @BindView(R.id.thirdButton) MaterialButton _thirdButton;
-    @BindView(R.id.fourthButton) MaterialButton _fourthButton;
+    @BindView(R.id.firstButton) TextInputEditText _firstButton;
+    @BindView(R.id.secondButton) TextInputEditText _secondButton;
+    @BindView(R.id.sendButton) MaterialButton _sendTest;
+    @BindView(R.id.cycling_spinner) Spinner _cyclingTestTypes;
+    @BindView(R.id.cycling_spinner_message) TextView _cyclingSpinnerMessage;
 
     public TasksFragment() {
         // Required empty public constructor
@@ -67,11 +83,11 @@ public class TasksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         /*if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }*/
-        setCurrentModeButtons(getCurrentMode());
 
 
     }
@@ -81,6 +97,78 @@ public class TasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
         ButterKnife.bind(this, view);
+        this.currentMode = getCurrentMode();
+        setCurrentModeButtons(currentMode);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.cycling_test_types, android.R.layout.simple_spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        _cyclingTestTypes.setAdapter(adapter);
+
+        ((MainActivity)getActivity())._currentModeGroup.addOnButtonCheckedListener(
+                new MaterialButtonToggleGroup.OnButtonCheckedListener() {
+            @Override
+            public void onButtonChecked(MaterialButtonToggleGroup group,
+                                        int checkedId, boolean isChecked) {
+                clearButtons();
+                System.out.println("Evento captado, el id es este " + checkedId);
+                setCurrentModeButtons(getCurrentMode());
+
+            }
+        });
+
+        _firstButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Boton clickado: " + _firstButton.getText());
+            }
+        });
+
+        _secondButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Segundo boton");
+            }
+        });
+
+        _sendTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                System.out.println("Envio la tarea: " + getCurrentMode());
+
+                switch (getCurrentMode()) {
+                    case "running":
+                        sendRunningTest(_firstButton.getText().toString());
+                        break;
+                    case "swimming":
+                        sendSwimmingTest(_firstButton.getText().toString(),
+                                _secondButton.getText().toString());
+                        break;
+                    case "cycling":
+                        sendCyclingTest(_firstButton.getText().toString());
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+
+        _cyclingTestTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                cyclingTestSelected = _cyclingTestTypes.getSelectedItem().toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         // Inflate the layout for this fragment
         return view;
     }
@@ -124,38 +212,164 @@ public class TasksFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
     public void setCurrentModeButtons(String mode) {
+        System.out.println("Modo en set current: " + mode);
+        this.currentMode = mode;
         switch (mode) {
             case "cycling":
-                //  TODO
-                //_firstButton.setVisibility(View.VISIBLE);
-                //_secondButton.setVisibility(View.VISIBLE);
-                //_thirdButton.setVisibility(View.INVISIBLE);
-                //_fourthButton.setVisibility(View.INVISIBLE);
+                _firstButton.setVisibility(View.VISIBLE);
+                _secondButton.setVisibility(View.INVISIBLE);
+                _cyclingSpinnerMessage.setVisibility(View.VISIBLE);
+                _cyclingTestTypes.setVisibility(View.VISIBLE);
+
+                _firstButton.setHint("Peak power");
                 break;
             case "running":
-                //_firstButton.setText("DISTANCE");
-                //_firstButton.setVisibility(View.VISIBLE);
-                //_secondButton.setText("VO2MAX");
-                //_secondButton.setVisibility(View.VISIBLE);
-                //_thirdButton.setVisibility(View.INVISIBLE);
-                //_fourthButton.setVisibility(View.INVISIBLE);
+                _firstButton.setVisibility(View.VISIBLE);
+                _secondButton.setVisibility(View.INVISIBLE);
+                _cyclingSpinnerMessage.setVisibility(View.INVISIBLE);
+                _cyclingTestTypes.setVisibility(View.INVISIBLE);
+
+                _firstButton.setHint("Distance");
                 break;
             case "swimming":
-                _firstButton.setText("VELOCITY LT");
-                //_firstButton.setVisibility(View.VISIBLE);
-                _secondButton.setText("VELOCITY ANAT");
-                //_secondButton.setVisibility(View.VISIBLE);
-                //_thirdButton.setVisibility(View.INVISIBLE);
-                //_fourthButton.setVisibility(View.INVISIBLE);
+                _firstButton.setVisibility(View.VISIBLE);
+                _secondButton.setVisibility(View.VISIBLE);
+                _cyclingSpinnerMessage.setVisibility(View.INVISIBLE);
+                _cyclingTestTypes.setVisibility(View.INVISIBLE);
+
+                _firstButton.setHint("200 meters mark");
+                _secondButton.setHint("400 meters mark");
                 break;
         }
     }
 
     public String getCurrentMode() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(((MainActivity)getActivity())
-                .getSharedPrefName(), Context.MODE_PRIVATE);
+        return ((MainActivity)getActivity()).getCurrentMode();
+    }
 
-        return prefs.getString(((MainActivity)getActivity()).getCurrentModeKey(), "");
+    public boolean sendRunningTest(String distance) {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.sendRunningTest("Bearer " +
+                TokenManager.getToken(getActivity()), _firstButton.getText().toString());
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse apiResponse = response.body();
+                    showSuccesfulMessage();
+                } else {
+                    System.out.println("Something failed");
+                    showErrorMessage("Something went wrong");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+        return true;
+    }
+
+    public boolean sendSwimmingTest(String timeFourHundred, String timeTwoHundred) {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.sendSwimmingTest("Bearer " +
+                TokenManager.getToken(getActivity()),
+                _firstButton.getText().toString(), _secondButton.getText().toString());
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse apiResponse = response.body();
+                    showSuccesfulMessage();
+                    //System.out.println(apiResponse.getMessage())
+                } else {
+                    System.out.println("Something failed");
+                    showErrorMessage("Something went wrong");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+        return true;
+    }
+
+    public boolean sendCyclingTest(String peakPower) {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = null;
+        switch (cyclingTestSelected) {
+            case "Six seconds":
+                call = apiService.sendCyclingSixSecTest("Bearer " +
+                        TokenManager.getToken(getActivity()), _firstButton.getText().toString());
+                break;
+            case "One minute":
+                call = apiService.sendCyclingOneMinTest("Bearer " +
+                        TokenManager.getToken(getActivity()), _firstButton.getText().toString());
+                break;
+            case "Six minutes":
+                call = apiService.sendCyclingSixMinTest("Bearer " +
+                        TokenManager.getToken(getActivity()), _firstButton.getText().toString());
+                break;
+            case "Twenty minutes":
+                call = apiService.sendCyclingTwentyMinTest("Bearer " +
+                        TokenManager.getToken(getActivity()), _firstButton.getText().toString());
+                break;
+            default:
+                break;
+        }
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse apiResponse = response.body();
+                    showSuccesfulMessage();
+                } else {
+                    System.out.println("Something failed");
+                    showErrorMessage("Something went wrong");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+        return true;
+    }
+
+    public void showSuccesfulMessage() {
+        Context context = getContext();
+
+        Toast toast = Toast.makeText(context, "Task succesfully sent", Toast.LENGTH_LONG);
+        toast.show();
+        /*View contextView = findView findViewById(R.id.fragmentContainer);
+
+        Snackbar.make(contextView, "idontknow", Snackbar.LENGTH_SHORT)
+                .show();*/
+    }
+
+    public void showErrorMessage(String message) {
+        Context context = getContext();
+
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    public void clearButtons() {
+        _firstButton.setText("");
+        _secondButton.setText("");
     }
 }

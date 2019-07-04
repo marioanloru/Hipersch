@@ -147,7 +147,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.d("Error:", t.getMessage());
-                System.out.println("--------------- erroooor");
                 //onLoginFailed();
             }
         });

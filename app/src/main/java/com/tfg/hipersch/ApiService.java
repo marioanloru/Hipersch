@@ -32,4 +32,35 @@ public interface ApiService {
                                    @Field("height") String height,
                                    @Field("gender") String gender,
                                    @Field("role") String role);
+
+    @FormUrlEncoded
+    @POST("running/test")
+    Call<ApiResponse> sendRunningTest(@Header("Authorization") String token,
+                                      @Field("distance") String distance);
+
+    @FormUrlEncoded
+    @POST("cycling/test/sixsec")
+    Call<ApiResponse> sendCyclingSixSecTest(@Header("Authorization") String token,
+                                            @Field("peakPower") String peakPower);
+
+    @FormUrlEncoded
+    @POST("cycling/test/onemin")
+    Call<ApiResponse> sendCyclingOneMinTest(@Header("Authorization") String token,
+                                            @Field("peakPower") String peakPower);
+
+    @FormUrlEncoded
+    @POST("cycling/test/sixmin")
+    Call<ApiResponse> sendCyclingSixMinTest(@Header("Authorization") String token,
+                                            @Field("peakPower") String peakPower);
+
+    @FormUrlEncoded
+    @POST("cycling/test/twentymin")
+    Call<ApiResponse> sendCyclingTwentyMinTest(@Header("Authorization") String token,
+                                               @Field("peakPower") String peakPower);
+
+    @FormUrlEncoded
+    @POST("swimming/test")
+    Call<ApiResponse> sendSwimmingTest(@Header("Authorization") String token,
+                                       @Field("timeFourHundred") String timeFourHundred,
+                                       @Field("timeTwoHundred") String timeTwoHundred);
 }

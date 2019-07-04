@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setCurrentMode("running", true);
 
         //  get token from app shared info
         showMainFragment();
@@ -53,12 +54,15 @@ public class MainActivity extends AppCompatActivity
                  switch (checkedId) {
                      case R.id.cyclingButtom:
                          setCurrentMode("cycling", isChecked);
+                         //updateFragment("cycling");
                          break;
                      case R.id.runningButtom:
                          setCurrentMode("running", isChecked);
+                         //updateFragment("running");
                          break;
                      case R.id.swimmingButtom:
                          setCurrentMode("swimming", isChecked);
+                         //updateFragment("swimming");
                          break;
                  }
 
@@ -120,6 +124,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setCurrentMode(String mode, boolean isChecked) {
+        System.out.println("--------Seteo currento mode: " + mode);
         if (isChecked) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
@@ -132,8 +137,9 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(title);
     }
 
-    public void getCurrentMode() {
+    public String getCurrentMode() {
         SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(CURRENT_MODE_KEY, "");
     }
 
     public String getSharedPrefName() {
@@ -143,6 +149,8 @@ public class MainActivity extends AppCompatActivity
     public String getCurrentModeKey() {
         return CURRENT_MODE_KEY;
     }
+
+
     @Override
     public void onBackPressed() {
         // Do nothing on back pressed at main activity

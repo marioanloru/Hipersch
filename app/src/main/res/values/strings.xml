@@ -10,7 +10,7 @@
     <string name="login_button">Login</string>
 
     <string name="menu_schedule">Schedule</string>
-    <string name="menu_tasks">Tasks</string>
+    <string name="menu_tasks">Tests</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_statistics">Statistics</string>
 
@@ -31,6 +31,13 @@
     <string name="signup_role_athlete">Athlete</string>
     <string name="signup_role_trainer">Trainer</string>
     <string name="signup_role">Role:</string>
+
+    <string-array name="cycling_test_types">
+        <item>Six seconds</item>
+        <item>One minute</item>
+        <item>Six minutes</item>
+        <item>Twenty minutes</item>
+    </string-array>
 
 
     <!-- TODO: Remove or change this placeholder text -->
