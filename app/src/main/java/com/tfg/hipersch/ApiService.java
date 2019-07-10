@@ -1,6 +1,8 @@
 package com.tfg.hipersch;
 
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -10,10 +12,11 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface ApiService {
-    //  Ejemplo sin variables
+
     @GET("status")
     Call<ApiResponse> getApiStatus();
 
+    //  User routes
     @GET("user/data")
     Call<ApiResponse> getUserData(@Header("Authorization") String token);
 
@@ -33,10 +36,20 @@ public interface ApiService {
                                    @Field("gender") String gender,
                                    @Field("role") String role);
 
+
+    //  Running routes
+    @GET("running/test")
+    Call<List<ApiResponse>> getRunningTests(@Header("Authorization") String token);
+
+
     @FormUrlEncoded
     @POST("running/test")
     Call<ApiResponse> sendRunningTest(@Header("Authorization") String token,
                                       @Field("distance") String distance);
+
+    //  Cycling routes
+    @GET("cycling/test")
+    Call<List<ApiResponse>> getCyclingTests(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @POST("cycling/test/sixsec")
@@ -57,6 +70,10 @@ public interface ApiService {
     @POST("cycling/test/twentymin")
     Call<ApiResponse> sendCyclingTwentyMinTest(@Header("Authorization") String token,
                                                @Field("peakPower") String peakPower);
+
+    //  Swimming routes
+    @GET("swimming/test")
+    Call<List<ApiResponse>> getSwimmingTests(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @POST("swimming/test")

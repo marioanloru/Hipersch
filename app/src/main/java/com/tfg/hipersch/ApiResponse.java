@@ -7,6 +7,13 @@ public class ApiResponse {
     private int bodyWeight;
     private double bmi;
 
+    //  Running
+    private double vo2max;
+    private double MAVvVo2max;
+    private double vat;
+    private String date;
+    //  private double
+
     public String getToken() {
         return this.token;
     }
@@ -15,6 +22,12 @@ public class ApiResponse {
     public int getHeight () { return this.height; }
     public int getBodyWeight() { return this.bodyWeight; }
     public double getBodyMassIndex() { return this.bmi; }
+
+    public double getVo2max() { return this.vo2max; }
+    public double getMavVo2max() { return this.MAVvVo2max; }
+    public double getVat() { return this.vat; }
+
+    public String getDate() { return this.date; };
 
     public void setToken(String token) {
         this.token = token;

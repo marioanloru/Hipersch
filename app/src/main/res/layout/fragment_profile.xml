@@ -79,13 +79,24 @@
 
         <View
             android:id="@+id/divider"
-            android:layout_width="395dp"
+            android:layout_width="426dp"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:background="?android:attr/listDivider"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/weight" />
+
+        <com.github.mikephil.charting.charts.RadarChart
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="324dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

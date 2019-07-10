@@ -1,14 +1,29 @@
 package com.tfg.hipersch;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.ArrayList;
 
 
 /**
@@ -28,6 +43,8 @@ public class StatisticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private CombinedChart chart;
 
     private OnFragmentInteractionListener mListener;
 
@@ -66,10 +83,109 @@ public class StatisticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        View view = inflater.inflate(R.layout.fragment_statistics, container, false);
+
+
+        /***/
+        chart = view.findViewById(R.id.combinedChart);
+        chart.getDescription().setEnabled(false);
+        chart.setBackgroundColor(Color.WHITE);
+
+        chart.setDrawGridBackground(false);
+        chart.setDrawBarShadow(false);
+        chart.setHighlightFullBarEnabled(false);
+
+        // draw bars behind lines
+        chart.setDrawOrder(new CombinedChart.DrawOrder[]{
+                CombinedChart.DrawOrder.BAR, CombinedChart.DrawOrder.BUBBLE,
+                CombinedChart.DrawOrder.CANDLE, CombinedChart.DrawOrder.LINE,
+                CombinedChart.DrawOrder.SCATTER
+        });
+
+        CombinedData data = new CombinedData();
+
+        data.setData(generateLineData());
+        data.setData(generateBarData());
+        //data.setValueTypeface(tfLight);
+
+        //xAxis.setAxisMaximum(data.getXMax() + 0.25f);
+
+        chart.setData(data);
+        chart.invalidate();
+
+        chart.animateXY(1400, 1400, Easing.EaseInOutQuad);
+
+        ConstraintLayout parent = view.findViewById(R.id.parent);
+        /***/
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private LineData generateLineData() {
+
+        LineData d = new LineData();
+
+        ArrayList<Entry> entries = new ArrayList<>();
+
+        for (int index = 0; index < 5; index++)
+            entries.add(new Entry(index + 0.5f, index));
+
+        LineDataSet set = new LineDataSet(entries, "Line DataSet");
+        set.setColor(Color.rgb(240, 238, 70));
+        set.setLineWidth(2.5f);
+        set.setCircleColor(Color.rgb(240, 238, 70));
+        set.setCircleRadius(5f);
+        set.setFillColor(Color.rgb(240, 238, 70));
+        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set.setDrawValues(true);
+        set.setValueTextSize(10f);
+        set.setValueTextColor(Color.rgb(240, 238, 70));
+
+        //set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        d.addDataSet(set);
+
+        return d;
+    }
+
+    private BarData generateBarData() {
+
+        ArrayList<BarEntry> entries1 = new ArrayList<>();
+        ArrayList<BarEntry> entries2 = new ArrayList<>();
+
+        for (int index = 0; index < 5; index++) {
+            entries1.add(new BarEntry(0, index));
+
+            // stacked
+            entries2.add(new BarEntry(0, new float[]{index, index * 2}));
+        }
+
+        BarDataSet set1 = new BarDataSet(entries1, "Bar 1");
+        set1.setColor(Color.rgb(60, 220, 78));
+        set1.setValueTextColor(Color.rgb(60, 220, 78));
+        set1.setValueTextSize(10f);
+        //  set1.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+        BarDataSet set2 = new BarDataSet(entries2, "");
+        set2.setStackLabels(new String[]{"Stack 1", "Stack 2"});
+        set2.setColors(Color.rgb(61, 165, 255), Color.rgb(23, 197, 255));
+        set2.setValueTextColor(Color.rgb(61, 165, 255));
+        set2.setValueTextSize(10f);
+        //set2.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+        float groupSpace = 0.06f;
+        float barSpace = 0.02f; // x2 dataset
+        float barWidth = 0.45f; // x2 dataset
+        // (0.45 + 0.02) * 2 + 0.06 = 1.00 -> interval per "group"
+
+        BarData d = new BarData(set1, set2);
+        d.setBarWidth(barWidth);
+
+        // make this BarData object grouped
+        d.groupBars(0, groupSpace, barSpace); // start at x = 0
+
+        return d;
+    }
+
+        // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
