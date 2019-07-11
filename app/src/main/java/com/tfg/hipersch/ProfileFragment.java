@@ -147,6 +147,16 @@ public class ProfileFragment extends Fragment {
 
         chart.animateXY(1400, 1400, Easing.EaseInOutQuad);
 
+        ((MainActivity)getActivity())._currentModeGroup.addOnButtonCheckedListener(
+                new MaterialButtonToggleGroup.OnButtonCheckedListener() {
+            @Override
+            public void onButtonChecked(MaterialButtonToggleGroup group,
+                                        int checkedId, boolean isChecked) {
+                System.out.println("Evento captado, hay que actualizar el grafo");
+                getUserTestsData();
+
+            }
+        });
         //  MarkerView mv = new RadarMarkerView(getContext(), R.layout.);
         // Inflate the layout for this fragment
         return view;
@@ -270,10 +280,6 @@ public class ProfileFragment extends Fragment {
                         default:
                             break;
                     }
-
-
-                    //apiResponse.getTestData(getCurrentMode());
-                    //addUserDataParameters(apiResponse);
                 } else {
                     System.out.println("-----Something failed");
                 }
@@ -285,25 +291,6 @@ public class ProfileFragment extends Fragment {
                 Log.d("Error:", t.getMessage());
                 //onLoginFailed();
             }
-
-            /*@Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {
-                    ApiResponse apiResponse = response.body();
-                    System.out.println("-------Api response: " + apiResponse.toString());
-                    //apiResponse.getTestData(getCurrentMode());
-                    //addUserDataParameters(apiResponse);
-                } else {
-                    System.out.println("-----Something failed");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                System.out.println("-------- Ha fallado!" + t.getMessage());
-                Log.d("Error:", t.getMessage());
-                //onLoginFailed();
-            }*/
         });
     }
 
@@ -316,23 +303,72 @@ public class ProfileFragment extends Fragment {
         ArrayList<RadarEntry> entries1 = new ArrayList<>();
         ArrayList<RadarEntry> entries2= new ArrayList<>();
         ArrayList<RadarEntry> entries3 = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
 
-        entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
-        entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
-        entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
-        System.out.println("Entries 1 ->" + entries1.toString());
+        switch (currentMode) {
+            case "running":
+                labels.add("vo2max");
+                labels.add("mavVo2max");
+                labels.add("vat");
 
-        entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
-        entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
-        entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
-        System.out.println("Entries 2 ->" + entries2.toString());
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
+                System.out.println("Entries 1 ->" + entries1.toString());
 
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
+                System.out.println("Entries 2 ->" + entries2.toString());
 
-        entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
-        entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
-        entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
-        System.out.println("Entries 3 ->" + entries3.toString());
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
+                System.out.println("Entries 3 ->" + entries3.toString());
+                break;
+            case "swimming":
+                labels.add("vo2max");
+                labels.add("mavVo2max");
+                labels.add("vat");
 
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
+                System.out.println("Entries 1 ->" + entries1.toString());
+
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
+                System.out.println("Entries 2 ->" + entries2.toString());
+
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
+                System.out.println("Entries 3 ->" + entries3.toString());
+                break;
+            case "cycling":
+                labels.add("vo2max");
+                labels.add("mavVo2max");
+                labels.add("vat");
+
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
+                System.out.println("Entries 1 ->" + entries1.toString());
+
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
+                System.out.println("Entries 2 ->" + entries2.toString());
+
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
+                System.out.println("Entries 3 ->" + entries3.toString());
+                break;
+            default:
+                break;
+        }
 
         DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
         DateFormat outputFormat = new SimpleDateFormat("EEE MMM dd", Locale.ENGLISH);
@@ -388,7 +424,6 @@ public class ProfileFragment extends Fragment {
         xAxis.setAxisMinimum(0f);
         xAxis.setYOffset(0f);
         xAxis.setXOffset(0f);
-        String[] labels = { "vo2max", "mavVo2max", "vat" };
         xAxis.setValueFormatter(new IndexAxisValueFormatter(labels));
 
         YAxis yAxis = chart.getYAxis();

@@ -77,6 +77,20 @@
             app:layout_constraintStart_toStartOf="@+id/bmiHeader"
             app:layout_constraintTop_toBottomOf="@+id/bmiHeader" />
 
+        <TextView
+            android:id="@+id/graphMessage"
+            android:layout_width="426dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider"
+            android:visibility="invisible"
+            android:text="Showing last three inserted tests"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weight"
+            />
+
         <View
             android:id="@+id/divider"
             android:layout_width="426dp"

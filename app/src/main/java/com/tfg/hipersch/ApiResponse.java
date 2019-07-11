@@ -12,6 +12,9 @@ public class ApiResponse {
     private double MAVvVo2max;
     private double vat;
     private String date;
+
+    //  Cycling
+    //  Swimming
     //  private double
 
     public String getToken() {
@@ -23,10 +26,13 @@ public class ApiResponse {
     public int getBodyWeight() { return this.bodyWeight; }
     public double getBodyMassIndex() { return this.bmi; }
 
+    //  Running
     public double getVo2max() { return this.vo2max; }
     public double getMavVo2max() { return this.MAVvVo2max; }
     public double getVat() { return this.vat; }
 
+    //  Swimming
+    //  Cycling
     public String getDate() { return this.date; };
 
     public void setToken(String token) {
