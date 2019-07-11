@@ -275,11 +275,12 @@ public class TasksFragment extends Fragment {
         return true;
     }
 
-    public boolean sendSwimmingTest(String timeFourHundred, String timeTwoHundred) {
+    public boolean sendSwimmingTest(String timeTwoHundred, String timeFourHundred) {
+        System.out.println("Envio tarea con estos paramettros 400 200 " + timeFourHundred + timeTwoHundred);
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.sendSwimmingTest("Bearer " +
                 TokenManager.getToken(getActivity()),
-                _firstButton.getText().toString(), _secondButton.getText().toString());
+                timeFourHundred, timeTwoHundred);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override

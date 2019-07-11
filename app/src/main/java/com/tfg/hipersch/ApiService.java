@@ -51,6 +51,18 @@ public interface ApiService {
     @GET("cycling/test")
     Call<List<ApiResponse>> getCyclingTests(@Header("Authorization") String token);
 
+    @GET("cycling/test/sixsec")
+    Call<List<ApiResponse>> getCyclingTestsSixSec(@Header("Authorization") String token);
+
+    @GET("cycling/test/onemin")
+    Call<List<ApiResponse>> getCyclingTestsOneMin(@Header("Authorization") String token);
+
+    @GET("cycling/test/sixmin")
+    Call<List<ApiResponse>> getCyclingTestsSixMin(@Header("Authorization") String token);
+
+    @GET("cycling/test/twentymin")
+    Call<List<ApiResponse>> getCyclingTestsTwentyMin(@Header("Authorization") String token);
+
     @FormUrlEncoded
     @POST("cycling/test/sixsec")
     Call<ApiResponse> sendCyclingSixSecTest(@Header("Authorization") String token,

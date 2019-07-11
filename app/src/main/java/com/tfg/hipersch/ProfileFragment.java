@@ -38,6 +38,7 @@ import com.github.mikephil.charting.data.RadarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -238,23 +239,40 @@ public class ProfileFragment extends Fragment {
     }
 
     public String getCurrentMode() {
-        return ((MainActivity)getActivity()).getCurrentMode();
+        String currentMode = "running";
+        try {
+            currentMode = ((MainActivity)getActivity()).getCurrentMode();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return currentMode;
+    }
+
+    public String getToken() {
+        String token = "";
+        try {
+            token = ((MainActivity)getActivity()).getToken();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return token;
     }
 
     private void getUserTestsData() {
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
-        System.out.println("Get user tests data, current mode --> " + getCurrentMode());
+        String currentMode = getCurrentMode();
+        System.out.println("Get user tests data, current mode --> " + currentMode);
 
         Call<List<ApiResponse>> call = null;
-        switch (getCurrentMode()) {
+        switch (currentMode) {
             case "cycling":
-                call = apiService.getCyclingTests("Bearer " + TokenManager.getToken(getActivity()));
+                call = apiService.getCyclingTests("Bearer " + getToken());
                 break;
             case "running":
-                call = apiService.getRunningTests("Bearer " + TokenManager.getToken(getActivity()));
+                call = apiService.getRunningTests("Bearer " + getToken());
                 break;
             case "swimming":
-                call = apiService.getSwimmingTests("Bearer " + TokenManager.getToken(getActivity()));
+                call = apiService.getSwimmingTests("Bearer " + getToken());
                 break;
             default:
                 break;
@@ -299,11 +317,18 @@ public class ProfileFragment extends Fragment {
         ArrayList<RadarEntry> entries = new ArrayList<>();
 
         System.out.println("El modo es: " + currentMode + entries.toString());
+        System.out.println("La respuesta de la api: :" + apiResponse.toString());
 
         ArrayList<RadarEntry> entries1 = new ArrayList<>();
         ArrayList<RadarEntry> entries2= new ArrayList<>();
         ArrayList<RadarEntry> entries3 = new ArrayList<>();
         ArrayList<String> labels = new ArrayList<>();
+
+        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        DateFormat outputFormat = new SimpleDateFormat("EEE MMM dd", Locale.ENGLISH);
+        Date dateParsed1 = null;
+        Date dateParsed2 = null;
+        Date dateParsed3 = null;
 
         switch (currentMode) {
             case "running":
@@ -327,63 +352,105 @@ public class ProfileFragment extends Fragment {
                 System.out.println("Entries 3 ->" + entries3.toString());
                 break;
             case "swimming":
-                labels.add("vo2max");
-                labels.add("mavVo2max");
-                labels.add("vat");
+                labels.add("Index ANAT");
+                labels.add("Index LT");
+                labels.add("ANA threshold");
+                labels.add("Lactate Threshold");
 
-                entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
-                entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
-                entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getIndexANAT()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getIndexLT()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getAnaThreshold()));
+                entries1.add(new RadarEntry((float)apiResponse.get(0).getLactateThreshold()));
                 System.out.println("Entries 1 ->" + entries1.toString());
 
-                entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
-                entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
-                entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getIndexANAT()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getIndexLT()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getAnaThreshold()));
+                entries2.add(new RadarEntry((float)apiResponse.get(1).getLactateThreshold()));
                 System.out.println("Entries 2 ->" + entries2.toString());
 
-                entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
-                entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
-                entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getIndexANAT()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getIndexLT()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getAnaThreshold()));
+                entries3.add(new RadarEntry((float)apiResponse.get(2).getLactateThreshold()));
                 System.out.println("Entries 3 ->" + entries3.toString());
                 break;
             case "cycling":
-                labels.add("vo2max");
-                labels.add("mavVo2max");
-                labels.add("vat");
+                labels.add("p6sec");
+                labels.add("p1min");
+                labels.add("p6min");
+                labels.add("p20min");
+                ArrayList samplesP6sec = new ArrayList<Float>();
+                ArrayList samplesP1min = new ArrayList<Float>();
+                ArrayList samplesP6min = new ArrayList<Float>();
+                ArrayList samplesP20min = new ArrayList<Float>();
 
-                entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
-                entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
-                entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
-                System.out.println("Entries 1 ->" + entries1.toString());
+                for (int i = 0; i < apiResponse.size(); i += 1) {
+                    switch (apiResponse.get(i).getType()) {
+                        case "p6sec":
+                            samplesP6sec.add(apiResponse.get(i).getP6sec());
+                            break;
+                        case "p1min":
+                            samplesP1min.add(apiResponse.get(i).getP1min());
+                            break;
+                        case "p6min":
+                            samplesP6min.add(apiResponse.get(i).getP6min());
+                            break;
+                        case "p20min":
+                            samplesP20min.add(apiResponse.get(i).getP20min());
+                            break;
+                        default:
+                            break;
+                    }
+                }
 
-                entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
-                entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
-                entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
-                System.out.println("Entries 2 ->" + entries2.toString());
+                System.out.println("Samples 1" + samplesP6sec.toString());
+                System.out.println("Samples 2" + samplesP1min.toString());
+                System.out.println("Samples 3" + samplesP6min.toString());
+                System.out.println("Samples 4" + samplesP20min.toString());
 
-                entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
-                entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
-                entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
-                System.out.println("Entries 3 ->" + entries3.toString());
+                for (int i = 0; i < samplesP6sec.size(); i += 1) {
+                    if (i == 0) entries1.add(new RadarEntry((float)samplesP6sec.get(i)));
+                    if (i == 1) entries2.add(new RadarEntry((float)samplesP6sec.get(i)));
+                    if (i == 2) entries3.add(new RadarEntry((float)samplesP6sec.get(i)));
+                }
+
+                for (int i = 0; i < samplesP1min.size(); i += 1) {
+                    if (i == 0) entries1.add(new RadarEntry((float)samplesP1min.get(i)));
+                    if (i == 1) entries2.add(new RadarEntry((float)samplesP1min.get(i)));
+                    if (i == 2) entries3.add(new RadarEntry((float)samplesP1min.get(i)));
+                }
+
+                for (int i = 0; i < samplesP6min.size(); i += 1) {
+                    if (i == 0) entries1.add(new RadarEntry((float)samplesP6min.get(i)));
+                    if (i == 1) entries2.add(new RadarEntry((float)samplesP6min.get(i)));
+                    if (i == 2) entries3.add(new RadarEntry((float)samplesP6min.get(i)));
+                }
+
+                for (int i = 0; i < samplesP20min.size(); i += 1) {
+                    if (i == 0) {
+                        entries1.add(new RadarEntry((float)samplesP20min.get(i)));
+                    }
+                    if (i == 1) entries2.add(new RadarEntry((float)samplesP20min.get(i)));
+                    if (i == 2) entries3.add(new RadarEntry((float)samplesP20min.get(i)));
+                }
+
                 break;
             default:
                 break;
         }
 
-        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
-        DateFormat outputFormat = new SimpleDateFormat("EEE MMM dd", Locale.ENGLISH);
-        Date dateParsed1 = null;
-        Date dateParsed2 = null;
-        Date dateParsed3 = null;
         try {
             dateParsed1 = inputFormat.parse(apiResponse.get(0).getDate());
             dateParsed2 = inputFormat.parse(apiResponse.get(1).getDate());
             dateParsed3 = inputFormat.parse(apiResponse.get(2).getDate());
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Entries 1 ---> " + entries1.toString());
+        System.out.println("Entries 2 ---> " + entries2.toString());
+        System.out.println("Entries 3 ---> " + entries3.toString());
 
         RadarDataSet set1 = new RadarDataSet(entries1, outputFormat.format(dateParsed1));
         RadarDataSet set2 = new RadarDataSet(entries2, outputFormat.format(dateParsed2));
@@ -442,6 +509,7 @@ public class ProfileFragment extends Fragment {
         l.setDrawInside(true);
         //l.setTypeface(tfLight);
         l.setXEntrySpace(7f);
+        l.setYEntrySpace(16f);
         //l.setTextColor(Color.WHITE);
 
 

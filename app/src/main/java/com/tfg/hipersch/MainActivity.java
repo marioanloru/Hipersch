@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity
         return prefs.getString(CURRENT_MODE_KEY, "");
     }
 
+    public String getToken() {
+        return TokenManager.getToken(this);
+    }
+
     public String getSharedPrefName() {
         return SHARED_PREF_NAME;
     }
