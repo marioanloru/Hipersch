@@ -120,6 +120,8 @@ public class LoginActivity extends AppCompatActivity {
         TokenManager.setToken(v.getContext(),response.getToken());
         if (response.getUserRole() == 'trainer') {
             Intent intent = new Intent(v.getContext(), TrainerLogin.class)
+            intent.putExtra(EMAIL, _emailText.getText().toString());
+            intent.putExtra(PASSWORD, _passwordText.getText().toString());
         } else {
             Intent intent = new Intent(v.getContext(), MainActivity.class);
         }

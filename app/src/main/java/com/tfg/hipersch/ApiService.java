@@ -26,6 +26,12 @@ public interface ApiService {
                                 @Field("password") String password);
 
     @FormUrlEncoded
+    @POST("user/login/trainer")
+    Call<ApiResponse> userLogin(@Field("email") String email,
+                                @Field("password") String password,
+                                @Field("athlete") String athlete);
+
+    @FormUrlEncoded
     @POST("user/register")
     Call<ApiResponse> userRegister(@Field("email") String email,
                                    @Field("password") String password,
