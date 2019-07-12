@@ -2,6 +2,7 @@ package com.tfg.hipersch;
 
 public class ApiResponse {
     private String token;
+    private String role;
     private String message;
     private int height;
     private int bodyWeight;
@@ -31,6 +32,7 @@ public class ApiResponse {
         return this.token;
     }
     public String getMessage() { return this.message; }
+    public String getRole() { return this.role; }
 
     public int getHeight () { return this.height; }
     public int getBodyWeight() { return this.bodyWeight; }

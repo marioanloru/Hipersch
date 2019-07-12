@@ -42,6 +42,13 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setCurrentMode("running", true);
 
+        //  Check if comes from athlete
+        Intent intent = getIntent();
+        try {
+            athlete = intent.getStringExtra(TrainerLogin.ATHLETE);
+        } catch (Exception e) {
+            System.out.println("No es un entrenador");
+        }
         //  get token from app shared info
         showMainFragment();
 

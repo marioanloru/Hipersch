@@ -118,9 +118,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess(View v, ApiResponse response) {
         TokenManager.setToken(v.getContext(),response.getToken());
-        Intent intent = new Intent(v.getContext(), MainActivity.class);
+        if (response.getUserRole() == 'trainer') {
+            Intent intent = new Intent(v.getContext(), TrainerLogin.class)
+        } else {
+            Intent intent = new Intent(v.getContext(), MainActivity.class);
+        }
         startActivity(intent);
-
     }
 
     public void onLoginFailed() {

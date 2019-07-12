@@ -120,7 +120,12 @@ public class SignUpPersonalActivity extends AppCompatActivity {
     }
 
     public void onRegisterSuccess(View v, ApiResponse response) {
-        Toast.makeText(getBaseContext(), "Register succeeded", Toast.LENGTH_LONG).show();
+        if (response.getRole() == 'trainer') {
+            Toast.makeText(getBaseContext(), "This action needs to be aproved by an admin", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getBaseContext(), "Register succeeded", Toast.LENGTH_LONG).show();
+        }
+        //  Comprobar role
         hideProgress();
         Intent intent = new Intent(v.getContext(), LoginActivity.class);
         startActivity(intent);
