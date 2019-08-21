@@ -26,4 +26,10 @@
           android:layout_height="wrap_content"
           android:visibility="invisible"
           />
-</ScrollView>
+
+      <com.google.android.material.button.MaterialButton
+          android:id="@+id/finish_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="FINISH" />
+</LinearLayout>

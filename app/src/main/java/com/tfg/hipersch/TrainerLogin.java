@@ -6,15 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -22,12 +28,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TrainerLogin extends AppCompatActivity {
+  public static final String ATHLETE = "hipersch.ATHLETE";
+public static final String EMAIL = "hipersch.EMAIL";
+public static final String PASSWORD = "hipersch.PASSWORD";
   private String selectedAthlete;
   private String email;
   private String password;
 
     @BindView(R.id.spinner) Spinner _athleteSpinner;
     @BindView(R.id.progress_bar) ProgressBar _progressBar;
+    @BindView(R.id.finish_button) MaterialButton _finishButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +54,18 @@ public class TrainerLogin extends AppCompatActivity {
         //password =
 
         ArrayList<String> athletes = new ArrayList<>();
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                athletes, android.R.layout.simple_spinner_dropdown_item);
+        athletes.add("elprimeratleta@gmail.com");
+        athletes.add("elsegundoatleta@gmail.com");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_spinner_item,
+                        athletes);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         _athleteSpinner.setAdapter(adapter);
 
-        _athleteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  
+        _athleteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
               selectedAthlete = _athleteSpinner.getSelectedItem().toString();
@@ -70,7 +84,7 @@ public class TrainerLogin extends AppCompatActivity {
         _finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validate()) register(v);
+                if (validate()) sendAthlete(v);
             }
         });
     }
@@ -86,7 +100,8 @@ public class TrainerLogin extends AppCompatActivity {
     boolean valid = true;
     if (sHeight.isEmpty()) {
         valid = false;
-        _athleteSpinner.setError("This field cannot be empty");
+        System.out.println("El campo no puede estar vacio!!!!");
+        //_athleteSpinner.setsetError("This field cannot be empty");
     }
 
     return valid;
@@ -98,12 +113,13 @@ public class TrainerLogin extends AppCompatActivity {
           hideProgress();
           return;
       }
-      _loginButton.setEnabled(false);
+      _finishButton.setEnabled(false);
 
       showProgress();
 
-      String email = _emailText.getText().toString();
-      String password = _passwordText.getText().toString();
+      Intent intent = getIntent();
+      String email = intent.getStringExtra(SignUpActivity.EMAIL);
+      String password = intent.getStringExtra(SignUpActivity.PASSWORD);
 
       //  Login
       ApiService apiService = ServiceGenerator.createService(ApiService.class);
@@ -116,7 +132,7 @@ public class TrainerLogin extends AppCompatActivity {
                   ApiResponse apiResponse = response.body();
                   onLoginSuccess(v, apiResponse);
               } else {
-                  onLoginCredentialsFailure();
+                  onLoginFailed();
               }
           }
 
@@ -129,14 +145,33 @@ public class TrainerLogin extends AppCompatActivity {
 
   }
 
+public void onLoginSuccess(View v, ApiResponse response) {
+        System.out.println("Login correcto!!");
+    /*TokenManager.setToken(v.getContext(),response.getToken());
+    Intent intent = new Intent(v.getContext(), MainActivity.class);
+    if (response.getUserRole() == "trainer") {
+        intent = new Intent(v.getContext(), TrainerLogin.class);
+        intent.getStringExtra(EMAIL, _emailText.getText().toString());
+        intent.putExtra(PASSWORD, _passwordText.getText().toString());
+    }
+    startActivity(intent);*/
+}
+
+    public void onLoginFailed() {
+        System.out.println("El login ha fallado");
+    /*Toast.makeText(getBaseContext(), "Please, try again in a few seconds", Toast.LENGTH_LONG).show();
+    hideProgress();
+    _loginButton.setEnabled(true);*/
+}
+
   public void showProgress() {
       _progressBar.setVisibility(View.VISIBLE);
-      _registerMessage.setVisibility(View.INVISIBLE);
+      //_registerMessage.setVisibility(View.INVISIBLE);
   }
 
   public void hideProgress() {
       _progressBar.setVisibility(View.INVISIBLE);
-      _registerMessage.setVisibility(View.VISIBLE);
+      //_registerMessage.setVisibility(View.VISIBLE);
   }
 
 }

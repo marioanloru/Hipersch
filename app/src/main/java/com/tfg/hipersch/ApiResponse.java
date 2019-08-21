@@ -8,6 +8,9 @@ public class ApiResponse {
     private int bodyWeight;
     private double bmi;
 
+    private String trainingZone;
+    private String trainingZoneTag;
+
     //  Cycling
     private float p6sec;
     private float p1min;
@@ -32,11 +35,14 @@ public class ApiResponse {
         return this.token;
     }
     public String getMessage() { return this.message; }
-    public String getRole() { return this.role; }
+    public String getUserRole() { return this.role; }
 
     public int getHeight () { return this.height; }
     public int getBodyWeight() { return this.bodyWeight; }
     public double getBodyMassIndex() { return this.bmi; }
+
+    public String getTrainingZone() { return this.trainingZone; }
+    public String getTrainingZoneTag() { return this.trainingZoneTag; }
 
 
     //  Cycling

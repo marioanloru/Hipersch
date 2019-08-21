@@ -114,6 +114,7 @@ public class TasksFragment extends Fragment {
                 clearButtons();
                 System.out.println("Evento captado, el id es este " + checkedId);
                 setCurrentModeButtons(getCurrentMode());
+                clearErrorMessages();
 
             }
         });
@@ -137,22 +138,28 @@ public class TasksFragment extends Fragment {
             public void onClick(View v) {
 
                 System.out.println("Envio la tarea: " + getCurrentMode());
-
+                _sendTest.setEnabled(false);
                 switch (getCurrentMode()) {
                     case "running":
-                        sendRunningTest(_firstButton.getText().toString());
+                        if (validateRunningTest()) {
+                            sendRunningTest(_firstButton.getText().toString());
+                        }
                         break;
                     case "swimming":
-                        sendSwimmingTest(_firstButton.getText().toString(),
-                                _secondButton.getText().toString());
+                        if (validateSwimmingTest()) {
+                            sendSwimmingTest(_firstButton.getText().toString(),
+                                    _secondButton.getText().toString());
+                        }
                         break;
                     case "cycling":
-                        sendCyclingTest(_firstButton.getText().toString());
+                        if (validateCyclingTest()) {
+                            sendCyclingTest(_firstButton.getText().toString());
+                        }
                         break;
                     default:
                         break;
                 }
-
+                _sendTest.setEnabled(true);
             }
         });
 
@@ -372,5 +379,58 @@ public class TasksFragment extends Fragment {
     public void clearButtons() {
         _firstButton.setText("");
         _secondButton.setText("");
+    }
+
+    private boolean validateRunningTest() {
+        String distance = _firstButton.getText().toString();
+
+        if (!distance.isEmpty()) {
+            return true;
+        } else {
+            if (distance.isEmpty()) {
+                _firstButton.setError("This field cannot be empty");
+            }
+            return false;
+        }
+    }
+
+    private boolean validateCyclingTest() {
+        String peakPower = _firstButton.getText().toString();
+
+        if (!peakPower.isEmpty() && !_cyclingTestTypes.getSelectedItem().toString().isEmpty()) {
+            return true;
+        } else {
+            if (peakPower.isEmpty()) {
+                _firstButton.setError("This field cannot be empty");
+            }
+
+            if (!_cyclingTestTypes.getSelectedItem().toString().isEmpty()) {
+                _cyclingSpinnerMessage.setError("You have to choose cycling test type");
+            }
+            return false;
+        }
+    }
+
+    private boolean validateSwimmingTest() {
+        String twoHundredMetersTime = _firstButton.getText().toString();
+        String fourHundredMetersTime = _secondButton.getText().toString();
+
+        if (!twoHundredMetersTime.isEmpty() && !fourHundredMetersTime.isEmpty()) {
+            return true;
+        } else {
+            if (twoHundredMetersTime.isEmpty()) {
+                _firstButton.setError("This field cannot be empty");
+            }
+
+            if (fourHundredMetersTime.isEmpty()) {
+                _secondButton.setError("This field cannot be empty");
+            }
+            return false;
+        }
+    }
+
+    private void clearErrorMessages() {
+        _firstButton.setError(null);
+        _secondButton.setError(null);
     }
 }

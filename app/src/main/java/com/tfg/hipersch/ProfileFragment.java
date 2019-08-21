@@ -12,6 +12,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,8 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -64,9 +67,12 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-    @BindView(R.id.height) TextView _height;
-    @BindView(R.id.weight) TextView _weight;
-    @BindView(R.id.bmi) TextView _bmi;
+    //@BindView(R.id.height) TextView _height;
+    @BindView(R.id.bmi) TextInputLayout _bmi;
+    @BindView(R.id.height) TextInputLayout _height;
+    @BindView(R.id.height_field) TextInputEditText _heightField;
+    @BindView(R.id.weight_field) TextInputEditText _weightField;
+    @BindView(R.id.bmi_field) TextInputEditText _bmiField;
 
     private int height;
     private int bodyWeight;
@@ -158,6 +164,45 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+        _bmi.setEnabled(false);
+
+
+        _heightField.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    updateHeight(TokenManager.getToken(getActivity()));
+                    System.out.println("Se ha pulsado enter!!!");
+                }
+                return false;
+            }
+        });
+
+        _weightField.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    updateWeight(TokenManager.getToken(getActivity()));
+                }
+                return false;
+            }
+        });
+        /*_heightField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    System.out.println("Tiene el foco");
+                    //if (!emailVisited) emailVisited = true;
+                } else {
+                    System.out.println("TNOOOOOiene el foco");
+
+                    //if (emailVisited) validateEmail();
+                }
+            }
+        });*/
         //  MarkerView mv = new RadarMarkerView(getContext(), R.layout.);
         // Inflate the layout for this fragment
         return view;
@@ -209,7 +254,7 @@ public class ProfileFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void getUserData(String token) {
+    private void getUserData(String token) {
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.getUserData("Bearer " + token);
 
@@ -232,10 +277,57 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    public void addUserDataParameters(ApiResponse response) {
-        _height.setText(Integer.toString(response.getHeight()));
-        _weight.setText(Integer.toString(response.getBodyWeight()));
-        _bmi.setText(Double.toString(response.getBodyMassIndex()));
+    private void updateHeight(String token) {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.updateUserData("Bearer " + token,
+                _heightField.getText().toString(), "");
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {;
+                    updateToken();
+                } else {
+                    System.out.println("Something failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+    }
+
+    private void updateWeight(String token) {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.updateUserData("Bearer " + token, "",
+                _weightField.getText().toString());
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    updateToken();
+                } else {
+                    System.out.println("Something failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+    }
+
+    private void addUserDataParameters(ApiResponse response) {
+        //_height.setText(Integer.toString(response.getHeight()));
+        _heightField.setText(Integer.toString(response.getHeight()));
+        _weightField.setText(Integer.toString(response.getBodyWeight()));
+        _bmiField.setText(Double.toString(response.getBodyMassIndex()));
     }
 
     public String getCurrentMode() {

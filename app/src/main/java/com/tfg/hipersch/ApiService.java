@@ -21,6 +21,12 @@ public interface ApiService {
     Call<ApiResponse> getUserData(@Header("Authorization") String token);
 
     @FormUrlEncoded
+    @POST("user/data")
+    Call<ApiResponse> updateUserData(@Header("Authorization") String token,
+                                @Field("height") String height,
+                                @Field("bodyWeight") String bodyWeight);
+
+    @FormUrlEncoded
     @POST("user/login")
     Call<ApiResponse> userLogin(@Field("email") String email,
                                 @Field("password") String password);
@@ -47,6 +53,8 @@ public interface ApiService {
     @GET("running/test")
     Call<List<ApiResponse>> getRunningTests(@Header("Authorization") String token);
 
+    @GET("running/trainingZone")
+    Call<ApiResponse> getRunningTrainingZone(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @POST("running/test")
@@ -68,6 +76,10 @@ public interface ApiService {
 
     @GET("cycling/test/twentymin")
     Call<List<ApiResponse>> getCyclingTestsTwentyMin(@Header("Authorization") String token);
+
+    @GET("cycling/trainingZone")
+    Call<ApiResponse> getCyclingTrainingZone(@Header("Authorization") String token);
+
 
     @FormUrlEncoded
     @POST("cycling/test/sixsec")
@@ -92,6 +104,9 @@ public interface ApiService {
     //  Swimming routes
     @GET("swimming/test")
     Call<List<ApiResponse>> getSwimmingTests(@Header("Authorization") String token);
+
+    @GET("swimming/trainingZone")
+    Call<ApiResponse> getSwimmingTrainingZone(@Header("Authorization") String token);
 
     @FormUrlEncoded
     @POST("swimming/test")

@@ -79,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@i+d/firstButton"
+        app:layout_constraintTop_toBottomOf="@+id/firstButton"
         />
 
     <com.google.android.material.button.MaterialButton

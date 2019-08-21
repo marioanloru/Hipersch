@@ -120,7 +120,7 @@ public class SignUpPersonalActivity extends AppCompatActivity {
     }
 
     public void onRegisterSuccess(View v, ApiResponse response) {
-        if (response.getRole() == 'trainer') {
+        if (response.getUserRole() == "trainer") {
             Toast.makeText(getBaseContext(), "This action needs to be aproved by an admin", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getBaseContext(), "Register succeeded", Toast.LENGTH_LONG).show();

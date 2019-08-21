@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         //  Check if comes from athlete
         Intent intent = getIntent();
         try {
-            athlete = intent.getStringExtra(TrainerLogin.ATHLETE);
+            String athlete = intent.getStringExtra(TrainerLogin.ATHLETE);
         } catch (Exception e) {
             System.out.println("No es un entrenador");
         }

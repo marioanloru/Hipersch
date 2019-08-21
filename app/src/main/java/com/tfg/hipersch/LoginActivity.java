@@ -22,6 +22,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    public static final String EMAIL = "hipersch.EMAIL";
+    public static final String PASSWORD = "hipersch.PASSWORD";
     private boolean emailVisited = false;
     private boolean passwordVisited = false;
     @BindView(R.id.email_field) TextInputEditText _emailText;
@@ -118,12 +120,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess(View v, ApiResponse response) {
         TokenManager.setToken(v.getContext(),response.getToken());
-        if (response.getUserRole() == 'trainer') {
-            Intent intent = new Intent(v.getContext(), TrainerLogin.class)
+        Intent intent = new Intent(v.getContext(), MainActivity.class);
+        if (response.getUserRole() == "trainer") {
+            intent = new Intent(v.getContext(), TrainerLogin.class);
             intent.putExtra(EMAIL, _emailText.getText().toString());
             intent.putExtra(PASSWORD, _passwordText.getText().toString());
-        } else {
-            Intent intent = new Intent(v.getContext(), MainActivity.class);
         }
         startActivity(intent);
     }
