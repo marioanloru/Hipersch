@@ -120,10 +120,11 @@ public static final String PASSWORD = "hipersch.PASSWORD";
       Intent intent = getIntent();
       String email = intent.getStringExtra(SignUpActivity.EMAIL);
       String password = intent.getStringExtra(SignUpActivity.PASSWORD);
+      String athlete = "marioanloru@gmail.com";
 
       //  Login
       ApiService apiService = ServiceGenerator.createService(ApiService.class);
-      Call<ApiResponse> call = apiService.userLogin(email, password);
+      Call<ApiResponse> call = apiService.userLogin(email, password, athlete);
 
       call.enqueue(new Callback<ApiResponse>() {
           @Override
@@ -146,15 +147,15 @@ public static final String PASSWORD = "hipersch.PASSWORD";
   }
 
 public void onLoginSuccess(View v, ApiResponse response) {
-        System.out.println("Login correcto!!");
-    /*TokenManager.setToken(v.getContext(),response.getToken());
-    Intent intent = new Intent(v.getContext(), MainActivity.class);
-    if (response.getUserRole() == "trainer") {
-        intent = new Intent(v.getContext(), TrainerLogin.class);
-        intent.getStringExtra(EMAIL, _emailText.getText().toString());
-        intent.putExtra(PASSWORD, _passwordText.getText().toString());
-    }
-    startActivity(intent);*/
+    System.out.println("Login correcto!!");
+    TokenManager.setToken(v.getContext(),response.getToken());
+        Intent intent = new Intent(v.getContext(), MainActivity.class);
+        if (response.getUserRole() == "trainer") {
+            intent = new Intent(v.getContext(), TrainerLogin.class);
+            intent.putExtra(EMAIL, _emailText.getText().toString());
+            intent.putExtra(PASSWORD, _passwordText.getText().toString());
+        }
+        startActivity(intent);
 }
 
     public void onLoginFailed() {

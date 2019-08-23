@@ -48,6 +48,9 @@ public interface ApiService {
                                    @Field("gender") String gender,
                                    @Field("role") String role);
 
+    @GET("user/athletes")
+    Call<ApiResponse> getUserAthletes(@Header("Authorization") String token);
+
 
     //  Running routes
     @GET("running/test")

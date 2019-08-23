@@ -7,6 +7,7 @@ public class ApiResponse {
     private int height;
     private int bodyWeight;
     private double bmi;
+    private ArrayList<String> athletes;
 
     private String trainingZone;
     private String trainingZoneTag;
@@ -36,6 +37,7 @@ public class ApiResponse {
     }
     public String getMessage() { return this.message; }
     public String getUserRole() { return this.role; }
+    public String getAthletes() { return this.athletes; }
 
     public int getHeight () { return this.height; }
     public int getBodyWeight() { return this.bodyWeight; }
