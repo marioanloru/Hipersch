@@ -54,6 +54,7 @@ public class TasksFragment extends Fragment {
 
     @BindView(R.id.firstButton) TextInputEditText _firstButton;
     @BindView(R.id.secondButton) TextInputEditText _secondButton;
+    @BindView(R.id.editTestsButton) MaterialButton _editTestsButton;
     @BindView(R.id.sendButton) MaterialButton _sendTest;
     @BindView(R.id.cycling_spinner) Spinner _cyclingTestTypes;
     @BindView(R.id.cycling_spinner_message) TextView _cyclingSpinnerMessage;
@@ -123,6 +124,13 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("Boton clickado: " + _firstButton.getText());
+            }
+        });
+
+        _editTestsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Hay que mostrar tests para administrarse: ");
             }
         });
 
