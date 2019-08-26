@@ -1,5 +1,7 @@
 package com.tfg.hipersch;
 
+import java.util.ArrayList;
+
 public class ApiResponse {
     private String token;
     private String role;
@@ -37,7 +39,7 @@ public class ApiResponse {
     }
     public String getMessage() { return this.message; }
     public String getUserRole() { return this.role; }
-    public String getAthletes() { return this.athletes; }
+    public ArrayList<String> getAthletes() { return this.athletes; }
 
     public int getHeight () { return this.height; }
     public int getBodyWeight() { return this.bodyWeight; }

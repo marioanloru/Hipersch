@@ -146,17 +146,17 @@ public static final String PASSWORD = "hipersch.PASSWORD";
 
   }
 
-public void onLoginSuccess(View v, ApiResponse response) {
-    System.out.println("Login correcto!!");
-    TokenManager.setToken(v.getContext(),response.getToken());
-        Intent intent = new Intent(v.getContext(), MainActivity.class);
-        if (response.getUserRole() == "trainer") {
-            intent = new Intent(v.getContext(), TrainerLogin.class);
-            intent.putExtra(EMAIL, _emailText.getText().toString());
-            intent.putExtra(PASSWORD, _passwordText.getText().toString());
-        }
-        startActivity(intent);
-}
+    public void onLoginSuccess(View v, ApiResponse response) {
+        System.out.println("Login trainer correcto!!");
+        /*TokenManager.setToken(v.getContext(),response.getToken());
+            Intent intent = new Intent(v.getContext(), MainActivity.class);
+            if (response.getUserRole() == "trainer") {
+                intent = new Intent(v.getContext(), TrainerLogin.class);
+                intent.putExtra(EMAIL, _emailText.getText().toString());
+                intent.putExtra(PASSWORD, _passwordText.getText().toString());
+            }
+            startActivity(intent);*/
+    }
 
     public void onLoginFailed() {
         System.out.println("El login ha fallado");

@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity
         implements ScheduleFragment.OnFragmentInteractionListener,
         StatisticsFragment.OnFragmentInteractionListener,
+        ManageTasksFragment.OnFragmentInteractionListener,
         TasksFragment.OnFragmentInteractionListener, ProfileFragment.OnFragmentInteractionListener {
 
     public final static String SHARED_PREF_NAME = "hipersch.SHARED_PREF";

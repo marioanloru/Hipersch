@@ -16,7 +16,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
@@ -70,9 +72,12 @@ public class ProfileFragment extends Fragment {
     //@BindView(R.id.height) TextView _height;
     @BindView(R.id.bmi) TextInputLayout _bmi;
     @BindView(R.id.height) TextInputLayout _height;
+    @BindView(R.id.weight) TextInputLayout _weight;
+    @BindView(R.id.chart) RadarChart _chart;
     @BindView(R.id.height_field) TextInputEditText _heightField;
     @BindView(R.id.weight_field) TextInputEditText _weightField;
     @BindView(R.id.bmi_field) TextInputEditText _bmiField;
+    @BindView(R.id.progress_bar) ProgressBar _progressBar;
 
     private int height;
     private int bodyWeight;
@@ -138,9 +143,10 @@ public class ProfileFragment extends Fragment {
         ButterKnife.bind(this, view);
         getUserData(TokenManager.getToken(getActivity()));
 
+        updateLoading(true);
         getUserTestsData();
 
-        chart = view.findViewById(R.id.chart1);
+        chart = view.findViewById(R.id.chart);
         chart.getDescription().setEnabled(false);
 
 
@@ -160,7 +166,9 @@ public class ProfileFragment extends Fragment {
             public void onButtonChecked(MaterialButtonToggleGroup group,
                                         int checkedId, boolean isChecked) {
                 System.out.println("Evento captado, hay que actualizar el grafo");
+                updateLoading(true);
                 getUserTestsData();
+                updateLoading(false);
 
             }
         });
@@ -173,7 +181,7 @@ public class ProfileFragment extends Fragment {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    updateHeight(TokenManager.getToken(getActivity()));
+                    updateHeight(v, getToken());
                     System.out.println("Se ha pulsado enter!!!");
                 }
                 return false;
@@ -182,10 +190,12 @@ public class ProfileFragment extends Fragment {
 
         _weightField.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                System.out.println("Weight field key pressed");
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    updateWeight(TokenManager.getToken(getActivity()));
+                    updateWeight(v, getToken());
+                    System.out.println("Se ha pulsado enter!!!");
                 }
                 return false;
             }
@@ -277,39 +287,21 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void updateHeight(String token) {
+    private void updateHeight(View v, String token) {
+        System.out.println("Update height!!");
+
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.updateUserData("Bearer " + token,
-                _heightField.getText().toString(), "");
-
-        call.enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if (response.isSuccessful()) {;
-                    updateToken();
-                } else {
-                    System.out.println("Something failed");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.d("Error:", t.getMessage());
-                //onLoginFailed();
-            }
-        });
-    }
-
-    private void updateWeight(String token) {
-        ApiService apiService = ServiceGenerator.createService(ApiService.class);
-        Call<ApiResponse> call = apiService.updateUserData("Bearer " + token, "",
-                _weightField.getText().toString());
+                _heightField.getText().toString(), _weightField.getText().toString());
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
-                    updateToken();
+                    Toast toast = Toast.makeText(v.getContext(),
+                            "Personal data succesfully updated", Toast.LENGTH_LONG);
+                    toast.show();
+                    TokenManager.updateToken(v.getContext());
                 } else {
                     System.out.println("Something failed");
                 }
@@ -322,6 +314,57 @@ public class ProfileFragment extends Fragment {
             }
         });
     }
+
+    private void updateWeight(View v, String token) {
+        System.out.println("Update weight!!");
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.updateUserData("Bearer " + token,
+                _heightField.getText().toString(), _weightField.getText().toString());
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    System.out.println("Todo okk!!" + response.body());
+                    Toast toast = Toast.makeText(v.getContext(),
+                            "Personal data succesfully updated", Toast.LENGTH_LONG);
+                    toast.show();
+                    TokenManager.updateToken(v.getContext());
+                } else {
+                    System.out.println("Something failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+    }
+    /*private void updateWeight(View v, String token) {
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = apiService.updateUserData("Bearer " + token, "",
+                _weightField.getText().toString());
+
+
+        call.enqueue(new Callback<ApiResponse>()
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()) {
+                    TokenManager.updateToken(v.getContext());
+                } else {
+                    System.out.println("Something failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+                //onLoginFailed();
+            }
+        });
+    }*/
 
     private void addUserDataParameters(ApiResponse response) {
         //_height.setText(Integer.toString(response.getHeight()));
@@ -344,6 +387,7 @@ public class ProfileFragment extends Fragment {
         String token = "";
         try {
             token = ((MainActivity)getActivity()).getToken();
+            System.out.println("Token que se envia!" + token);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -354,17 +398,18 @@ public class ProfileFragment extends Fragment {
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         String currentMode = getCurrentMode();
         System.out.println("Get user tests data, current mode --> " + currentMode);
-
+        String limit = "3";
+        String offset = "0";
         Call<List<ApiResponse>> call = null;
         switch (currentMode) {
             case "cycling":
-                call = apiService.getCyclingTests("Bearer " + getToken());
+                call = apiService.getCyclingTests("Bearer " + getToken(), limit, offset);
                 break;
             case "running":
-                call = apiService.getRunningTests("Bearer " + getToken());
+                call = apiService.getRunningTests("Bearer " + getToken(), limit, offset);
                 break;
             case "swimming":
-                call = apiService.getSwimmingTests("Bearer " + getToken());
+                call = apiService.getSwimmingTests("Bearer " + getToken(), limit, offset);
                 break;
             default:
                 break;
@@ -376,6 +421,8 @@ public class ProfileFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<ApiResponse> apiResponse = response.body();
                     System.out.println("-------Api response: " + apiResponse.toString());
+
+                    updateLoading(false);
 
                     switch (getCurrentMode()) {
                         case "cycling":
@@ -607,6 +654,24 @@ public class ProfileFragment extends Fragment {
 
         chart.invalidate();
     }
+
+    private void updateLoading(Boolean loading) {
+        System.out.println("Cargando!! " + loading.toString());
+        if (loading) {
+            _progressBar.setVisibility(View.VISIBLE);
+            _height.setVisibility(View.INVISIBLE);
+            _weight.setVisibility(View.INVISIBLE);
+            _bmi.setVisibility(View.INVISIBLE);
+            _chart.setVisibility(View.INVISIBLE);
+        } else {
+            _progressBar.setVisibility(View.INVISIBLE);
+            _height.setVisibility(View.VISIBLE);
+            _weight.setVisibility(View.VISIBLE);
+            _bmi.setVisibility(View.VISIBLE);
+            _chart.setVisibility(View.VISIBLE);
+        }
+    }
+
 
 
 }

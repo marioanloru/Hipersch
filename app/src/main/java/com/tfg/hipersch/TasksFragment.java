@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -171,6 +173,18 @@ public class TasksFragment extends Fragment {
             }
         });
 
+        _editTestsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ManageTasksFragment manageTasksFragment = new ManageTasksFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainer, manageTasksFragment);
+                fragmentTransaction.commit();
+
+                //getSupportActionBar().setTitle("Profile");
+            }
+        });
         _cyclingTestTypes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -261,7 +275,13 @@ public class TasksFragment extends Fragment {
     }
 
     public String getCurrentMode() {
-        return ((MainActivity)getActivity()).getCurrentMode();
+        String currentMode = "running";
+        try {
+            currentMode = ((MainActivity)getActivity()).getCurrentMode();
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return currentMode;
     }
 
     public boolean sendRunningTest(String distance) {

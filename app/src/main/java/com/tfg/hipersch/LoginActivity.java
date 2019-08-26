@@ -2,7 +2,9 @@ package com.tfg.hipersch;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -22,6 +24,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    public final static String SHARED_PREF_NAME = "hipersch.SHARED_PREF";
     public static final String EMAIL = "hipersch.EMAIL";
     public static final String PASSWORD = "hipersch.PASSWORD";
     private boolean emailVisited = false;
@@ -126,6 +129,14 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra(EMAIL, _emailText.getText().toString());
             intent.putExtra(PASSWORD, _passwordText.getText().toString());
         }
+
+        SharedPreferences prefs = v.getContext().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(EMAIL, _emailText.getText().toString());
+        editor.putString(PASSWORD, _passwordText.getText().toString());
+        editor.apply();
+
+
         startActivity(intent);
     }
 

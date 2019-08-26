@@ -10,6 +10,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -53,8 +55,10 @@ public interface ApiService {
 
 
     //  Running routes
-    @GET("running/test")
-    Call<List<ApiResponse>> getRunningTests(@Header("Authorization") String token);
+    @GET("running/test/{limit}/{offset}")
+    Call<List<ApiResponse>> getRunningTests(@Header("Authorization") String token,
+                                            @Path("limit") String limit,
+                                            @Path("offset") String offset);
 
     @GET("running/trainingZone")
     Call<ApiResponse> getRunningTrainingZone(@Header("Authorization") String token);
@@ -65,8 +69,10 @@ public interface ApiService {
                                       @Field("distance") String distance);
 
     //  Cycling routes
-    @GET("cycling/test")
-    Call<List<ApiResponse>> getCyclingTests(@Header("Authorization") String token);
+    @GET("cycling/test/{limit}/{offset}")
+    Call<List<ApiResponse>> getCyclingTests(@Header("Authorization") String token,
+                                            @Path("limit") String limit,
+                                            @Path("offset") String offset);
 
     @GET("cycling/test/sixsec")
     Call<List<ApiResponse>> getCyclingTestsSixSec(@Header("Authorization") String token);
@@ -105,8 +111,10 @@ public interface ApiService {
                                                @Field("peakPower") String peakPower);
 
     //  Swimming routes
-    @GET("swimming/test")
-    Call<List<ApiResponse>> getSwimmingTests(@Header("Authorization") String token);
+    @GET("swimming/test/{limit}/{offset}")
+    Call<List<ApiResponse>> getSwimmingTests(@Header("Authorization") String token,
+                                             @Path("limit") String limit,
+                                             @Path("offset") String offset);
 
     @GET("swimming/trainingZone")
     Call<ApiResponse> getSwimmingTrainingZone(@Header("Authorization") String token);

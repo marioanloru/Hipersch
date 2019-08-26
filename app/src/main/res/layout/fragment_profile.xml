@@ -12,6 +12,16 @@
         android:layout_height="match_parent">
 
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"
+            />
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/height"
             android:layout_width="64dp"
@@ -20,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/weight"
             app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <!--android:hint="@string/hint_text"-->
 
@@ -42,11 +53,12 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/height"
             app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <!--android:hint="@string/hint_text"-->
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bmi_field"
+                android:id="@+id/weight_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Weight"
@@ -64,11 +76,12 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/weight"
             app:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
             <!--android:hint="@string/hint_text"-->
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/weight_field"
+                android:id="@+id/bmi_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Bmi"
@@ -107,8 +120,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"
             android:layout_marginBottom="16dp"
-            android:id="@+id/chart1"
+            android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="324dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
