@@ -36,7 +36,6 @@ import retrofit2.Response;
  */
 public class ManageTasksFragment extends Fragment {
     @BindView(R.id.progress_bar) ProgressBar _progressBar;
-    //@BindView(R.id.table) TableLayout _tableLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,6 +85,7 @@ public class ManageTasksFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
+
 
         this.limit = "5";
         this.offset = "0";
@@ -182,13 +182,7 @@ public class ManageTasksFragment extends Fragment {
                     List<ApiResponse> apiResponse = response.body();
                     System.out.println("-------Api response: " + apiResponse.toString());
 
-
-                    _progressBar.setVisibility(View.INVISIBLE);
-                    /*_progressBar.setVisibility(View.INVISIBLE);
-                    _height.setVisibility(View.VISIBLE);
-                    _weight.setVisibility(View.VISIBLE);
-                    _bmi.setVisibility(View.VISIBLE);
-                    _chart.setVisibility(View.VISIBLE);*/
+                    updateLoading(false);
 
                     switch (getCurrentMode()) {
                         case "cycling":
@@ -223,5 +217,18 @@ public class ManageTasksFragment extends Fragment {
             e.printStackTrace();
         }
         return token;
+    }
+
+    private void updateLoading(Boolean loading) {
+        System.out.println("Escondo progress bar: " + loading.toString());
+        if (loading) {
+            System.out.println("LO PONGO A VISIBLE");
+            _progressBar.setVisibility(View.VISIBLE);
+        } else {
+            System.out.println("LO PONGO A INVISIBLE");
+            _progressBar.setVisibility(View.INVISIBLE);
+        }
+
+        System.out.println(_progressBar.getVisibility());
     }
 }
