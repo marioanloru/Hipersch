@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
@@ -35,7 +37,10 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class ManageTasksFragment extends Fragment {
-    @BindView(R.id.progress_bar) ProgressBar _progressBar;
+    //@BindView(R.id.progress_bar) ProgressBar _progressBar;
+    @BindView(R.id.previousButton) MaterialButton _previousButton;
+    @BindView(R.id.nextButton) MaterialButton _nextButton;
+    @BindView(R.id.table) TableLayout _table;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -83,24 +88,15 @@ public class ManageTasksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        System.out.println("On create view manage tasks");
+        View view = inflater.inflate(R.layout.fragment_manage_tasks, container, false);
         ButterKnife.bind(this, view);
 
 
         this.limit = "5";
         this.offset = "0";
-        //TableLayout table = (TableLayout) getView().findViewById(R.id.table);
 
         getUserTestsData();
-        /*TableRow row1 = new TableRow(getContext());
-        row1.setLayoutParams(new TableLayout.LayoutParams( TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
-        TextView textview = new TextView(getContext());
-        textview.setText("pruebaaa");
-        //textview.getTextColors(R.color.)
-        //textview.setTextColor(Color.YELLOW);
-        row1.addView(textview);
-        table.addView(row1);*/
-
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_manage_tasks, container, false);
@@ -221,14 +217,19 @@ public class ManageTasksFragment extends Fragment {
 
     private void updateLoading(Boolean loading) {
         System.out.println("Escondo progress bar: " + loading.toString());
-        if (loading) {
+        /*if (loading) {
             System.out.println("LO PONGO A VISIBLE");
-            _progressBar.setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.table).setVisibility(View.INVISIBLE);
+            getView().findViewById(R.id.previousButton).setVisibility(View.INVISIBLE);
+            getView().findViewById(R.id.nextButton).setVisibility(View.INVISIBLE);
         } else {
-            System.out.println("LO PONGO A INVISIBLE");
-            _progressBar.setVisibility(View.INVISIBLE);
+            getView().findViewById(R.id.progress_bar).setVisibility(View.INVISIBLE);
+            getView().findViewById(R.id.table).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.previousButton).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.nextButton).setVisibility(View.VISIBLE);
         }
 
-        System.out.println(_progressBar.getVisibility());
+        System.out.println(_progressBar.getVisibility());*/
     }
 }
