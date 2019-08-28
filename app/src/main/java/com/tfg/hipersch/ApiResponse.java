@@ -13,6 +13,7 @@ public class ApiResponse {
 
     private String trainingZone;
     private String trainingZoneTag;
+    private String testId;
 
     //  Cycling
     private float p6sec;
@@ -67,6 +68,7 @@ public class ApiResponse {
     public double getAnaThreshold() { return this.anaThreshold; }
     public double getLactateThreshold() { return this.lactateThreshold; }
 
+    public String getTestId() { return this.testId; }
     public String getDate() { return this.date; };
 
     public void setToken(String token) {

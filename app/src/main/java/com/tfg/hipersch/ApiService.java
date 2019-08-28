@@ -5,6 +5,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -68,6 +69,9 @@ public interface ApiService {
     Call<ApiResponse> sendRunningTest(@Header("Authorization") String token,
                                       @Field("distance") String distance);
 
+    @DELETE("running/test/{testId}")
+    Call<ApiResponse> deleteRunningTest(@Header("Authorization") String token,
+                                        @Path("testId") String testId);
     //  Cycling routes
     @GET("cycling/test/{limit}/{offset}")
     Call<List<ApiResponse>> getCyclingTests(@Header("Authorization") String token,
@@ -88,6 +92,10 @@ public interface ApiService {
 
     @GET("cycling/trainingZone")
     Call<ApiResponse> getCyclingTrainingZone(@Header("Authorization") String token);
+
+    @DELETE("cycling/test/{testId}")
+    Call<ApiResponse> deleteCyclingTest(@Header("Authorization") String token,
+                                        @Path("testId") String testId);
 
 
     @FormUrlEncoded
@@ -124,4 +132,8 @@ public interface ApiService {
     Call<ApiResponse> sendSwimmingTest(@Header("Authorization") String token,
                                        @Field("timeFourHundred") String timeFourHundred,
                                        @Field("timeTwoHundred") String timeTwoHundred);
+
+    @DELETE("swimming/test/{testId}")
+    Call<ApiResponse> deleteSwimmingTest(@Header("Authorization") String token,
+                                        @Path("testId") String testId);
 }

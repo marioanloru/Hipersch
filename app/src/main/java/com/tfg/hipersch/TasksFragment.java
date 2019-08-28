@@ -60,7 +60,6 @@ public class TasksFragment extends Fragment {
     @BindView(R.id.sendButton) MaterialButton _sendTest;
     @BindView(R.id.cycling_spinner) Spinner _cyclingTestTypes;
     @BindView(R.id.cycling_spinner_message) TextView _cyclingSpinnerMessage;
-
     public TasksFragment() {
         // Required empty public constructor
     }
@@ -108,7 +107,6 @@ public class TasksFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         _cyclingTestTypes.setAdapter(adapter);
-
         ((MainActivity)getActivity())._currentModeGroup.addOnButtonCheckedListener(
                 new MaterialButtonToggleGroup.OnButtonCheckedListener() {
             @Override

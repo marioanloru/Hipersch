@@ -15,8 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
@@ -37,10 +39,39 @@ import retrofit2.Response;
  * create an instance of this fragment.
  */
 public class ManageTasksFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private int limit;
+    private int offset;
+
+    private ApiResponse response1;
+    private ApiResponse response2;
+    private ApiResponse response3;
+    private ApiResponse response4;
+    private ApiResponse response5;
+
+    private String discipline1;
+    private String discipline2;
+    private String discipline3;
+    private String discipline4;
+    private String discipline5;
+
+    private OnFragmentInteractionListener mListener;
+
     //@BindView(R.id.progress_bar) ProgressBar _progressBar;
     @BindView(R.id.previousButton) MaterialButton _previousButton;
     @BindView(R.id.nextButton) MaterialButton _nextButton;
     @BindView(R.id.table) TableLayout _table;
+
+    @BindView(R.id.deleteButton1) MaterialButton _deleteButton1;
+    @BindView(R.id.deleteButton2) MaterialButton _deleteButton2;
+    @BindView(R.id.deleteButton3) MaterialButton _deleteButton3;
+    @BindView(R.id.deleteButton4) MaterialButton _deleteButton4;
+    @BindView(R.id.deleteButton5) MaterialButton _deleteButton5;
 
     @BindView(R.id.field1_1) TextView _field11;
     @BindView(R.id.field1_2) TextView _field12;
@@ -66,17 +97,6 @@ public class ManageTasksFragment extends Fragment {
     @BindView(R.id.field5_2) TextView _field52;
     @BindView(R.id.field5_3) TextView _field53;
     @BindView(R.id.field5_4) TextView _field54;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private int limit;
-    private int offset;
-
-    private OnFragmentInteractionListener mListener;
 
     public ManageTasksFragment() {
         // Required empty public constructor
@@ -116,20 +136,34 @@ public class ManageTasksFragment extends Fragment {
         System.out.println("On create view manage tasks");
         View view = inflater.inflate(R.layout.fragment_manage_tasks, container, false);
         ButterKnife.bind(this, view);
-
-
         this.limit = 5;
         this.offset = 0;
 
+        View inflatedView = inflater.inflate(R.layout.fragment_manage_tasks, container, false);
+
+        MaterialButton buttoon = (MaterialButton) inflatedView.findViewById(R.id.nextButton);
+        buttoon.setText("asdasd");
         getUserTestsData();
         _previousButton.setEnabled(false);
+
+
+        ((MainActivity)getActivity())._currentModeGroup.addOnButtonCheckedListener(
+                new MaterialButtonToggleGroup.OnButtonCheckedListener() {
+                    @Override
+                    public void onButtonChecked(MaterialButtonToggleGroup group,
+                                                int checkedId, boolean isChecked) {
+                        System.out.println("Evento captado, hay que actualizar el grafo");
+                        getUserTestsData();
+
+                    }
+                });
 
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Boton clickado: " + _firstButton.getText());
+                //System.out.println("Boton clickado: " + _firstButton.getText());
                 _previousButton.setEnabled(true);
-                this.offset = this.offset + this.limit;
+                increaseOffset();
                 getUserTestsData();
             }
         });
@@ -138,15 +172,335 @@ public class ManageTasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("Pagino hacia atras!");
-                if (this.offset - this.limit > 0) {
-                    this.offset = this.offset - this.limit;
-                    getUserTestsData();
-                }
+                decreaseOffset();
+                getUserTestsData();
             }
         });
 
+        _deleteButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Delete boton 1: " + discipline1);
+                switch (discipline1) {
+                    case "running":
+                        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+                        Call<ApiResponse> call = apiService.deleteRunningTest("Bearer " + getToken(), response1.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response1.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "cycling":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteCyclingTest("Bearer " + getToken(), response1.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response1.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "swimming":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteSwimmingTest("Bearer " + getToken(), response1.getTestId());
+
+                        System.out.println("Llamo a deeteswimming");
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response1.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                }
+
+            }
+        });
+
+        _deleteButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (discipline1) {
+                    case "running":
+                        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+                        Call<ApiResponse> call = apiService.deleteRunningTest("Bearer " + getToken(), response2.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response2.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "cycling":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteRunningTest("Bearer " + getToken(), response2.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response2.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "swimming":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteSwimmingTest("Bearer " + getToken(), response2.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response2.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                }
+
+                getUserTestsData();
+            }
+        });
+
+        _deleteButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (discipline1) {
+                    case "running":
+                        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+                        Call<ApiResponse> call = apiService.deleteRunningTest("Bearer " + getToken(), response3.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response3.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "cycling":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteRunningTest("Bearer " + getToken(), response3.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response3.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "swimming":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteSwimmingTest("Bearer " + getToken(), response3.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response3.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                }
+
+                getUserTestsData();
+            }
+        });
+
+        _deleteButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (discipline1) {
+                    case "running":
+                        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+                        Call<ApiResponse> call = apiService.deleteRunningTest("Bearer " + getToken(), response4.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response4.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "cycling":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteRunningTest("Bearer " + getToken(), response4.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response4.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "swimming":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteSwimmingTest("Bearer " + getToken(), response4.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response4.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                }
+
+                getUserTestsData();
+            }
+        });
+
+        _deleteButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (discipline1) {
+                    case "running":
+                        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+                        Call<ApiResponse> call = apiService.deleteRunningTest("Bearer " + getToken(), response5.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response5.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "cycling":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteRunningTest("Bearer " + getToken(), response5.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response5.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                    case "swimming":
+                        apiService = ServiceGenerator.createService(ApiService.class);
+                        call = apiService.deleteSwimmingTest("Bearer " + getToken(), response5.getTestId());
+
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                System.out.println("He borrado con testid: " + response5.getTestId());
+                                showDeleteSuccess();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                Log.d("Error:", t.getMessage());
+                                showDeleteError();
+                            }
+                        });
+                        break;
+                }
+
+                getUserTestsData();
+            }
+        });
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_manage_tasks, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -206,14 +560,22 @@ public class ManageTasksFragment extends Fragment {
         Call<List<ApiResponse>> call = null;
         switch (currentMode) {
             case "cycling":
-                call = apiService.getCyclingTests("Bearer " + getToken(), this.limit.toString, this.offset.toString);
+                System.out.println("Recupero de cycling");
+
+                call = apiService.getCyclingTests("Bearer " + getToken(),
+                        Integer.toString(this.limit), Integer.toString(this.offset));
                 
                 break;
             case "running":
-                call = apiService.getRunningTests("Bearer " + getToken(), this.limit.toString, this.offset.toString);
+                System.out.println("Recupero de running");
+
+                call = apiService.getRunningTests("Bearer " + getToken(),
+                        Integer.toString(this.limit), Integer.toString(this.offset));
                 break;
             case "swimming":
-                call = apiService.getSwimmingTests("Bearer " + getToken(), this.limit.toString, this.offset.toString);
+                System.out.println("Recupero de swimming");
+                call = apiService.getSwimmingTests("Bearer " + getToken(),
+                        Integer.toString(this.limit), Integer.toString(this.offset));
                 break;
             default:
                 break;
@@ -226,71 +588,182 @@ public class ManageTasksFragment extends Fragment {
                     List<ApiResponse> apiResponse = response.body();
                     System.out.println("-------Api response: " + apiResponse.toString());
 
+                    String modoActual = getCurrentMode();
+
+                    System.out.println("Modo actual: " + modoActual);
                     updateLoading(false);
-                    String field11, field12, field13, field14, field21, field22, field23, field24, field31, field32, field33, field34, field41, field42, field43, field44, field51, field52, field53, field54;  
+                    updateResponses(apiResponse);
                     //  Inicializar campos aqui
-                    switch (getCurrentMode()) {
+                    System.out.println("Modo al actualizar" + modoActual);
+                    switch (modoActual) {
                         case "cycling":
+                            discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "cycling";
+
+                            try {
+                                _field11.setText("" + apiResponse.get(0).getP6sec());
+                                _field12.setText(Double.toString(apiResponse.get(0).getP1min()));
+                                _field13.setText(Double.toString(apiResponse.get(0).getP6min()));
+                                _field14.setText(Double.toString(apiResponse.get(0).getP20min()));
+
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 1");
+                                _deleteButton1.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field21.setText(Double.toString(apiResponse.get(1).getP6sec()));
+                                _field22.setText(Double.toString(apiResponse.get(1).getP1min()));
+                                _field23.setText(Double.toString(apiResponse.get(1).getP6min()));
+                                _field24.setText(Double.toString(apiResponse.get(1).getP20min()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 2");
+                                _deleteButton2.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field31.setText("" + apiResponse.get(2).getP6sec());
+                                _field32.setText(Double.toString(apiResponse.get(2).getP1min()));
+                                _field33.setText(Double.toString(apiResponse.get(2).getP6min()));
+                                _field34.setText(Double.toString(apiResponse.get(2).getP20min()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 3");
+                                _deleteButton3.setVisibility(View.INVISIBLE);
+                            }
+
+
+                            try {
+                                _field41.setText("" + apiResponse.get(3).getP6sec());
+                                _field42.setText(Double.toString(apiResponse.get(3).getP1min()));
+                                _field43.setText(Double.toString(apiResponse.get(3).getP6min()));
+                                _field44.setText(Double.toString(apiResponse.get(3).getP20min()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 4");
+                                _deleteButton4.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field51.setText("" + apiResponse.get(4).getP6sec());
+                                _field52.setText(Double.toString(apiResponse.get(4).getP1min()));
+                                _field53.setText(Double.toString(apiResponse.get(4).getP6min()));
+                                _field54.setText(Double.toString(apiResponse.get(4).getP20min()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 5");
+                                _deleteButton5.setVisibility(View.INVISIBLE);
+                            }
                             break;
                         case "running":
-                            entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
-                            entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
-                            entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
+                            System.out.println("Entro en running");
 
-                            field11.setText(apiResponse.get(0).getVat());
-                            field12 = apiResponse.get(0).getVat();
-                            field13 = apiResponse.get(0).getVat();
-                            //field14 = apiResponse.get(0).getVat();
+                            System.out.println("Primer valor: " + Double.toString(apiResponse.get(0).getVat()));
+                            System.out.println("Primer valor: " + Double.toString(apiResponse.get(0).getVo2max()));
+                            System.out.println("Primer valor: " + Double.toString(apiResponse.get(0).getMavVo2max()));
+                            discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "running";
 
-                            field21 = apiResponse.get(1).getVat();
-                            field22 = apiResponse.get(1).getVat();
-                            field23 = apiResponse.get(1).getVat();
-                            //field24 = setText(apiResponse.get(1).etVat());
+                            try {
 
-                            field31 = apiResponse.get(2).getVat();
-                            field32 = apiResponse.get(2).getVat();
-                            field33 = apiResponse.get(2).getVat();
-                            //field34 = apiResponse.get(2).getVat();
+                                _field11.setText("" + apiResponse.get(0).getVat());
+                                _field12.setText(Double.toString(apiResponse.get(0).getVo2max()));
+                                _field13.setText(Double.toString(apiResponse.get(0).getMavVo2max()));
 
-                            field41 = apiResponse.get(3).getVat();
-                            field42 = apiResponse.get(3).getVat();
-                            field43 = apiResponse.get(3).getVat();
-                            //field44 = apiResponse.get(3).getVat();
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 1");
+                                _deleteButton1.setVisibility(View.INVISIBLE);
+                            }
 
-                            field51 = apiResponse.get(4).getVat();
-                            field52 = apiResponse.get(4).getVat();
-                            field53 = apiResponse.get(4).getVat();
-                            //field54 = apiResponse.get(4).getVat();
-                        break;
+                            try {
+                                _field21.setText(Double.toString(apiResponse.get(1).getVat()));
+                                _field22.setText(Double.toString(apiResponse.get(1).getVo2max()));
+                                _field23.setText(Double.toString(apiResponse.get(1).getMavVo2max()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 2");
+                                _deleteButton2.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field31.setText(Double.toString(apiResponse.get(2).getVat()));
+                                _field32.setText(Double.toString(apiResponse.get(2).getVo2max()));
+                                _field33.setText(Double.toString(apiResponse.get(2).getMavVo2max()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 3");
+                                _deleteButton3.setVisibility(View.INVISIBLE);
+                            }
+
+
+                            try {
+                                _field41.setText(Double.toString(apiResponse.get(3).getVat()));
+                                _field42.setText(Double.toString(apiResponse.get(3).getVo2max()));
+                                _field43.setText(Double.toString(apiResponse.get(3).getMavVo2max()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 4");
+                                _deleteButton4.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field51.setText(Double.toString(apiResponse.get(4).getVat()));
+                                _field52.setText(Double.toString(apiResponse.get(4).getVo2max()));
+                                _field53.setText(Double.toString(apiResponse.get(4).getMavVo2max()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 5");
+                                _deleteButton5.setVisibility(View.INVISIBLE);
+                            }
+                            break;
                         case "swimming":
+                            discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "swimming";
+                            System.out.println("Entro en swimming");
+                            try {
+                                _field11.setText("" + apiResponse.get(0).getLactateThreshold());
+                                _field12.setText(Double.toString(apiResponse.get(0).getAnaThreshold()));
+                                _field13.setText(Double.toString(apiResponse.get(0).getIndexANAT()));
+                                _field14.setText(Double.toString(apiResponse.get(0).getIndexLT()));
+
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 1");
+                                _deleteButton1.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field21.setText("" + apiResponse.get(1).getLactateThreshold());
+                                _field22.setText(Double.toString(apiResponse.get(1).getAnaThreshold()));
+                                _field23.setText(Double.toString(apiResponse.get(1).getIndexANAT()));
+                                _field24.setText(Double.toString(apiResponse.get(1).getIndexLT()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 2");
+                                _deleteButton2.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field31.setText("" + apiResponse.get(2).getLactateThreshold());
+                                _field32.setText(Double.toString(apiResponse.get(2).getAnaThreshold()));
+                                _field33.setText(Double.toString(apiResponse.get(2).getIndexANAT()));
+                                _field34.setText(Double.toString(apiResponse.get(2).getIndexLT()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 3");
+                                _deleteButton3.setVisibility(View.INVISIBLE);
+                            }
+
+
+                            try {
+                                _field41.setText("" + apiResponse.get(3).getLactateThreshold());
+                                _field42.setText(Double.toString(apiResponse.get(3).getAnaThreshold()));
+                                _field43.setText(Double.toString(apiResponse.get(3).getIndexANAT()));
+                                _field44.setText(Double.toString(apiResponse.get(3).getIndexLT()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 4");
+                                _deleteButton4.setVisibility(View.INVISIBLE);
+                            }
+
+                            try {
+                                _field51.setText("" + apiResponse.get(4).getLactateThreshold());
+                                _field52.setText(Double.toString(apiResponse.get(4).getAnaThreshold()));
+                                _field53.setText(Double.toString(apiResponse.get(4).getIndexANAT()));
+                                _field54.setText(Double.toString(apiResponse.get(4).getIndexLT()));
+                            } catch (Exception e) {
+                                System.out.println("Ha fallado en el 5");
+                                _deleteButton5.setVisibility(View.INVISIBLE);
+                            }
                             break;
                         default:
                             break;
-
-                        _field11.setText(apiResponse.get(0).getVat());
-                        _field12.setText(apiResponse.get(0).getVat());
-                        _field13.setText(apiResponse.get(0).getVat());
-                        //if exists _field14.setText(apiResponse.get(0).getVat());
-                        
-                        _field21.setText(apiResponse.get(1).getVat());
-                        _field22.setText(apiResponse.get(1).getVat());
-                        _field23.setText(apiResponse.get(1).getVat());
-                        // if exists_field24.setText(apiResponse.get(1).getVat());
-
-                        _field31.setText(apiResponse.get(2).getVat());
-                        _field32.setText(apiResponse.get(2).getVat());
-                        _field33.setText(apiResponse.get(2).getVat());
-                        // if exists _field34.setText(apiResponse.get(2).getVat());
-
-                        _field41.setText(apiResponse.get(3).getVat());
-                        _field42.setText(apiResponse.get(3).getVat());
-                        _field43.setText(apiResponse.get(3).getVat());
-                        // if exists _field44.setText(apiResponse.get(3).getVat());
-
-                        _field51.setText(apiResponse.get(4).getVat());
-                        _field52.setText(apiResponse.get(4).getVat());
-                        _field53.setText(apiResponse.get(4).getVat());
-                        // if exists _field54.setText(apiResponse.get(4).getVat());
                     }
                 } else {
                     System.out.println("-----Something failed");
@@ -334,4 +807,40 @@ public class ManageTasksFragment extends Fragment {
 
         System.out.println(_progressBar.getVisibility());*/
     }
+
+    private void increaseOffset() {
+        this.offset = this.offset + this.limit;
+        System.out.println("Offset despues" + this.offset);
+    }
+
+    private void decreaseOffset() {
+        if (this.offset - this.limit > 0) {
+            this.offset = this.offset - this.limit;
+        }
+        System.out.println("Offset despues" + this.offset);
+    }
+
+    private void updateResponses(List<ApiResponse> data) {
+        try {
+            this.response1 = data.get(0);
+            this.response2 = data.get(1);
+            this.response3 = data.get(2);
+            this.response4 = data.get(3);
+            this.response5 = data.get(4);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
+
+    private void showDeleteError() {
+        Toast toast = Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    private void showDeleteSuccess() {
+        getUserTestsData();
+        Toast toast = Toast.makeText(getContext(), "Task succesfully sent", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
 }
