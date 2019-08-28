@@ -50,6 +50,17 @@
                 android:textColor="#ffffff"
                 android:gravity="center"
                 android:layout_column="1" />
+
+            <TextView
+                android:text="El nuevo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:textColor="#ffffff"
+                android:visibility="invisible"
+                android:gravity="center"
+                android:layout_column="1" />
+
             <TextView
                 android:text="Action"
                 android:layout_width="match_parent"
@@ -68,6 +79,7 @@
             >
 
             <TextView
+                android:id="@+id/1_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,6 +88,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/1_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -84,6 +97,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/1_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="8dp"
@@ -92,8 +106,19 @@
                 android:layout_weight="1"
                 android:layout_column="1" />
 
+            <TextView
+                android:id="@+id/1_4"
+                android:text="5.2"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_column="1" />
+
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/deleteButton1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -108,6 +133,7 @@
             >
 
             <TextView
+                android:id="@+id/2_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -116,6 +142,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/2_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,6 +151,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/2_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -132,8 +160,19 @@
                 android:layout_weight="1"
                 android:layout_column="1" />
 
+            <TextView
+                android:id="@+id/2_4"
+                android:text="5.2"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_column="1" />
+
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/deleteButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -147,6 +186,7 @@
             >
 
             <TextView
+                android:id="@+id/3_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -155,6 +195,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/3_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -163,17 +204,27 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/3_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-
                 android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:layout_column="1" />
 
+            <TextView
+                android:id="@+id/3_3"
+                android:text="5.2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_column="1" />
+
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/deleteButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -188,6 +239,7 @@
             >
 
             <TextView
+                android:id="@+id/4_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -196,6 +248,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/4_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -204,6 +257,18 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/4_3"
+                android:text="5.2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_column="1" />
+
+            <TextView
+                android:id="@+id/4_4"
+                android:id="@+id/3_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,7 +278,7 @@
                 android:layout_column="1" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/deleteButton4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -227,6 +292,7 @@
             >
 
             <TextView
+                android:id="@+id/5_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -235,6 +301,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/5_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -243,6 +310,7 @@
                 android:layout_column="1" />
 
             <TextView
+                android:id="@+id/5_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -252,8 +320,18 @@
                 android:layout_weight="1"
                 android:layout_column="1" />
 
+            <TextView
+                android:id="@+id/5_4"
+                android:text="5.2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:layout_column="1" />
+
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/deleteButton5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

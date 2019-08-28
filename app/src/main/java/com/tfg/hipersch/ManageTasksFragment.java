@@ -42,14 +42,39 @@ public class ManageTasksFragment extends Fragment {
     @BindView(R.id.nextButton) MaterialButton _nextButton;
     @BindView(R.id.table) TableLayout _table;
 
+    @BindView(R.id.field1_1) TextView _field11;
+    @BindView(R.id.field1_2) TextView _field12;
+    @BindView(R.id.field1_3) TextView _field13;
+    @BindView(R.id.field1_4) TextView _field14;
+
+    @BindView(R.id.field2_1) TextView _field21;
+    @BindView(R.id.field2_2) TextView _field22;
+    @BindView(R.id.field2_3) TextView _field23;
+    @BindView(R.id.field2_4) TextView _field24;
+
+    @BindView(R.id.field3_1) TextView _field31;
+    @BindView(R.id.field3_2) TextView _field32;
+    @BindView(R.id.field3_3) TextView _field33;
+    @BindView(R.id.field3_4) TextView _field34;
+
+    @BindView(R.id.field4_1) TextView _field41;
+    @BindView(R.id.field4_2) TextView _field42;
+    @BindView(R.id.field4_3) TextView _field43;
+    @BindView(R.id.field4_4) TextView _field44;
+
+    @BindView(R.id.field5_1) TextView _field51;
+    @BindView(R.id.field5_2) TextView _field52;
+    @BindView(R.id.field5_3) TextView _field53;
+    @BindView(R.id.field5_4) TextView _field54;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String limit;
-    private String offset;
+    private int limit;
+    private int offset;
 
     private OnFragmentInteractionListener mListener;
 
@@ -93,10 +118,32 @@ public class ManageTasksFragment extends Fragment {
         ButterKnife.bind(this, view);
 
 
-        this.limit = "5";
-        this.offset = "0";
+        this.limit = 5;
+        this.offset = 0;
 
         getUserTestsData();
+        _previousButton.setEnabled(false);
+
+        _nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Boton clickado: " + _firstButton.getText());
+                _previousButton.setEnabled(true);
+                this.offset = this.offset + this.limit;
+                getUserTestsData();
+            }
+        });
+
+        _previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Pagino hacia atras!");
+                if (this.offset - this.limit > 0) {
+                    this.offset = this.offset - this.limit;
+                    getUserTestsData();
+                }
+            }
+        });
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_manage_tasks, container, false);
@@ -159,13 +206,14 @@ public class ManageTasksFragment extends Fragment {
         Call<List<ApiResponse>> call = null;
         switch (currentMode) {
             case "cycling":
-                call = apiService.getCyclingTests("Bearer " + getToken(), this.limit, this.offset);
+                call = apiService.getCyclingTests("Bearer " + getToken(), this.limit.toString, this.offset.toString);
+                
                 break;
             case "running":
-                call = apiService.getRunningTests("Bearer " + getToken(), this.limit, this.offset);
+                call = apiService.getRunningTests("Bearer " + getToken(), this.limit.toString, this.offset.toString);
                 break;
             case "swimming":
-                call = apiService.getSwimmingTests("Bearer " + getToken(), this.limit, this.offset);
+                call = apiService.getSwimmingTests("Bearer " + getToken(), this.limit.toString, this.offset.toString);
                 break;
             default:
                 break;
@@ -179,16 +227,70 @@ public class ManageTasksFragment extends Fragment {
                     System.out.println("-------Api response: " + apiResponse.toString());
 
                     updateLoading(false);
-
+                    String field11, field12, field13, field14, field21, field22, field23, field24, field31, field32, field33, field34, field41, field42, field43, field44, field51, field52, field53, field54;  
+                    //  Inicializar campos aqui
                     switch (getCurrentMode()) {
                         case "cycling":
                             break;
                         case "running":
-                            break;
+                            entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
+                            entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
+                            entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
+
+                            field11.setText(apiResponse.get(0).getVat());
+                            field12 = apiResponse.get(0).getVat();
+                            field13 = apiResponse.get(0).getVat();
+                            //field14 = apiResponse.get(0).getVat();
+
+                            field21 = apiResponse.get(1).getVat();
+                            field22 = apiResponse.get(1).getVat();
+                            field23 = apiResponse.get(1).getVat();
+                            //field24 = setText(apiResponse.get(1).etVat());
+
+                            field31 = apiResponse.get(2).getVat();
+                            field32 = apiResponse.get(2).getVat();
+                            field33 = apiResponse.get(2).getVat();
+                            //field34 = apiResponse.get(2).getVat();
+
+                            field41 = apiResponse.get(3).getVat();
+                            field42 = apiResponse.get(3).getVat();
+                            field43 = apiResponse.get(3).getVat();
+                            //field44 = apiResponse.get(3).getVat();
+
+                            field51 = apiResponse.get(4).getVat();
+                            field52 = apiResponse.get(4).getVat();
+                            field53 = apiResponse.get(4).getVat();
+                            //field54 = apiResponse.get(4).getVat();
+                        break;
                         case "swimming":
                             break;
                         default:
                             break;
+
+                        _field11.setText(apiResponse.get(0).getVat());
+                        _field12.setText(apiResponse.get(0).getVat());
+                        _field13.setText(apiResponse.get(0).getVat());
+                        //if exists _field14.setText(apiResponse.get(0).getVat());
+                        
+                        _field21.setText(apiResponse.get(1).getVat());
+                        _field22.setText(apiResponse.get(1).getVat());
+                        _field23.setText(apiResponse.get(1).getVat());
+                        // if exists_field24.setText(apiResponse.get(1).getVat());
+
+                        _field31.setText(apiResponse.get(2).getVat());
+                        _field32.setText(apiResponse.get(2).getVat());
+                        _field33.setText(apiResponse.get(2).getVat());
+                        // if exists _field34.setText(apiResponse.get(2).getVat());
+
+                        _field41.setText(apiResponse.get(3).getVat());
+                        _field42.setText(apiResponse.get(3).getVat());
+                        _field43.setText(apiResponse.get(3).getVat());
+                        // if exists _field44.setText(apiResponse.get(3).getVat());
+
+                        _field51.setText(apiResponse.get(4).getVat());
+                        _field52.setText(apiResponse.get(4).getVat());
+                        _field53.setText(apiResponse.get(4).getVat());
+                        // if exists _field54.setText(apiResponse.get(4).getVat());
                     }
                 } else {
                     System.out.println("-----Something failed");
