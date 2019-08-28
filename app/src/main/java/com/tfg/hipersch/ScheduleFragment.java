@@ -6,9 +6,19 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.android.material.button.MaterialButtonToggleGroup;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -20,6 +30,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ScheduleFragment extends Fragment {
+    @BindView(R.id.trainingZone) TextView _trainingZone;
+    @BindView(R.id.description) TextView _description;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -66,7 +79,21 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        ButterKnife.bind(this, view);
+        ((MainActivity)getActivity())._currentModeGroup.addOnButtonCheckedListener(
+                new MaterialButtonToggleGroup.OnButtonCheckedListener() {
+                    @Override
+                    public void onButtonChecked(MaterialButtonToggleGroup group,
+                                                int checkedId, boolean isChecked) {
+                        System.out.println("Evento captado, hay que actualizar el grafo");
+                        getTrainingZone();
+
+                    }
+                });
+
+        getTrainingZone();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,5 +133,73 @@ public class ScheduleFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public String getCurrentMode() {
+        String currentMode = "running";
+        try {
+            currentMode = ((MainActivity)getActivity()).getCurrentMode();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return currentMode;
+    }
+
+    public String getToken() {
+        String token = "";
+        try {
+            token = ((MainActivity)getActivity()).getToken();
+            System.out.println("Token que se envia!" + token);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    private void getTrainingZone() {
+        String currentMode = getCurrentMode();
+        ApiService apiService = ServiceGenerator.createService(ApiService.class);
+        Call<ApiResponse> call = null;
+        switch (currentMode) {
+            case "running":
+                call = apiService.getRunningTrainingZone("Bearer " + getToken());
+                break;
+            case "swimming":
+                call = apiService.getSwimmingTrainingZone("Bearer " + getToken());
+                break;
+            case "cycling":
+                call = apiService.getCyclingTrainingZone("Bearer " + getToken());
+                break;
+        }
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                System.out.println("!!!!!!!!!!!!!");
+                switch (currentMode) {
+                    case "running":
+                        _trainingZone.setText(response.body().getTrainingZone());
+                        _description.setText("Lorem ipsum blablalbasdasdf asdfas f asdfasdf asd fas df asdf asdf as dfasdfabalblabal");
+                        break;
+                    case "swimming":
+                        _trainingZone.setText(response.body().getTrainingZoneTwoHundred());
+                        System.out.println(response.body().getTrainingZoneFourHundred());
+                        _description.setText("Lorem ipsum blablalbasdasdf asdfas f asdfasdf asd fas df asdf asdf as dfasdfabalblabal");
+
+                        break;
+                    case "cycling":
+                        _trainingZone.setText(response.body().getTrainingZone());
+                        System.out.println("TAG!!!! " + response.body().getTrainingZoneTag());
+                        _description.setText("Lorem ipsum blablalbasdasdf asdfas f asdfasdf asd fas df asdf asdf as dfasdfabalblabal");
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                Log.d("Error:", t.getMessage());
+            }
+        });
     }
 }

@@ -13,6 +13,8 @@ public class ApiResponse {
 
     private String trainingZone;
     private String trainingZoneTag;
+    private String trainingZoneTwoHundred;
+    private String trainingZoneFourHundred;
     private String testId;
 
     //  Cycling
@@ -47,6 +49,8 @@ public class ApiResponse {
     public double getBodyMassIndex() { return this.bmi; }
 
     public String getTrainingZone() { return this.trainingZone; }
+    public String getTrainingZoneTwoHundred() { return this.trainingZoneTwoHundred; }
+    public String getTrainingZoneFourHundred() { return this.trainingZoneFourHundred; }
     public String getTrainingZoneTag() { return this.trainingZoneTag; }
 
 
