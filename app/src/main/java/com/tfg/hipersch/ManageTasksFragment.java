@@ -67,6 +67,11 @@ public class ManageTasksFragment extends Fragment {
     @BindView(R.id.nextButton) MaterialButton _nextButton;
     @BindView(R.id.table) TableLayout _table;
 
+    @BindView(R.id.header1) TextView _header1;
+    @BindView(R.id.header2) TextView _header2;
+    @BindView(R.id.header3) TextView _header3;
+    @BindView(R.id.header4) TextView _header4;
+
     @BindView(R.id.deleteButton1) MaterialButton _deleteButton1;
     @BindView(R.id.deleteButton2) MaterialButton _deleteButton2;
     @BindView(R.id.deleteButton3) MaterialButton _deleteButton3;
@@ -153,6 +158,7 @@ public class ManageTasksFragment extends Fragment {
                     public void onButtonChecked(MaterialButtonToggleGroup group,
                                                 int checkedId, boolean isChecked) {
                         System.out.println("Evento captado, hay que actualizar el grafo");
+                        _previousButton.setEnabled(false);
                         getUserTestsData();
 
                     }
@@ -165,6 +171,10 @@ public class ManageTasksFragment extends Fragment {
                 _previousButton.setEnabled(true);
                 increaseOffset();
                 getUserTestsData();
+                System.out.println("----------------------" + _field11.getVisibility() + _field21.getVisibility());
+                if (_field21.getVisibility() == View.INVISIBLE) {
+                    _nextButton.setEnabled(false);
+                }
             }
         });
 
@@ -172,8 +182,14 @@ public class ManageTasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 System.out.println("Pagino hacia atras!");
+                _nextButton.setEnabled(true);
                 decreaseOffset();
                 getUserTestsData();
+                _deleteButton1.setVisibility(View.VISIBLE);
+                _deleteButton2.setVisibility(View.VISIBLE);
+                _deleteButton3.setVisibility(View.VISIBLE);
+                _deleteButton4.setVisibility(View.VISIBLE);
+                _deleteButton5.setVisibility(View.VISIBLE);
             }
         });
 
@@ -558,6 +574,7 @@ public class ManageTasksFragment extends Fragment {
         System.out.println("Get user tests data, current mode --> " + currentMode);
 
         Call<List<ApiResponse>> call = null;
+        System.out.println("Peticion con limit y offset:: " + Integer.toString(this.limit) + Integer.toString(this.offset));
         switch (currentMode) {
             case "cycling":
                 System.out.println("Recupero de cycling");
@@ -568,7 +585,6 @@ public class ManageTasksFragment extends Fragment {
                 break;
             case "running":
                 System.out.println("Recupero de running");
-
                 call = apiService.getRunningTests("Bearer " + getToken(),
                         Integer.toString(this.limit), Integer.toString(this.offset));
                 break;
@@ -595,9 +611,37 @@ public class ManageTasksFragment extends Fragment {
                     updateResponses(apiResponse);
                     //  Inicializar campos aqui
                     System.out.println("Modo al actualizar" + modoActual);
+                    _field11.setVisibility(View.VISIBLE);
+                    _field21.setVisibility(View.VISIBLE);
+                    _field31.setVisibility(View.VISIBLE);
+                    _field41.setVisibility(View.VISIBLE);
+                    _field51.setVisibility(View.VISIBLE);
+
+                    _field12.setVisibility(View.VISIBLE);
+                    _field22.setVisibility(View.VISIBLE);
+                    _field32.setVisibility(View.VISIBLE);
+                    _field42.setVisibility(View.VISIBLE);
+                    _field52.setVisibility(View.VISIBLE);
+
+                    _field13.setVisibility(View.VISIBLE);
+                    _field23.setVisibility(View.VISIBLE);
+                    _field33.setVisibility(View.VISIBLE);
+                    _field43.setVisibility(View.VISIBLE);
+                    _field53.setVisibility(View.VISIBLE);
                     switch (modoActual) {
                         case "cycling":
                             discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "cycling";
+                            _field14.setVisibility(View.VISIBLE);
+                            _field24.setVisibility(View.VISIBLE);
+                            _field34.setVisibility(View.VISIBLE);
+                            _field44.setVisibility(View.VISIBLE);
+                            _field54.setVisibility(View.VISIBLE);
+
+                            _header1.setText("6sec");
+                            _header2.setText("1min");
+                            _header3.setText("6min");
+                            _header4.setText("20sec");
+                            _header4.setVisibility(View.VISIBLE);
 
                             try {
                                 _field11.setText("" + apiResponse.get(0).getP6sec());
@@ -607,6 +651,10 @@ public class ManageTasksFragment extends Fragment {
 
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 1");
+                                _field11.setVisibility(View.INVISIBLE);
+                                _field12.setVisibility(View.INVISIBLE);
+                                _field13.setVisibility(View.INVISIBLE);
+                                _field14.setVisibility(View.INVISIBLE);
                                 _deleteButton1.setVisibility(View.INVISIBLE);
                             }
 
@@ -617,6 +665,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field24.setText(Double.toString(apiResponse.get(1).getP20min()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 2");
+                                _field21.setVisibility(View.INVISIBLE);
+                                _field22.setVisibility(View.INVISIBLE);
+                                _field23.setVisibility(View.INVISIBLE);
+                                _field24.setVisibility(View.INVISIBLE);
                                 _deleteButton2.setVisibility(View.INVISIBLE);
                             }
 
@@ -627,6 +679,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field34.setText(Double.toString(apiResponse.get(2).getP20min()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 3");
+                                _field31.setVisibility(View.INVISIBLE);
+                                _field32.setVisibility(View.INVISIBLE);
+                                _field33.setVisibility(View.INVISIBLE);
+                                _field34.setVisibility(View.INVISIBLE);
                                 _deleteButton3.setVisibility(View.INVISIBLE);
                             }
 
@@ -638,6 +694,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field44.setText(Double.toString(apiResponse.get(3).getP20min()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 4");
+                                _field41.setVisibility(View.INVISIBLE);
+                                _field42.setVisibility(View.INVISIBLE);
+                                _field43.setVisibility(View.INVISIBLE);
+                                _field44.setVisibility(View.INVISIBLE);
                                 _deleteButton4.setVisibility(View.INVISIBLE);
                             }
 
@@ -648,15 +708,27 @@ public class ManageTasksFragment extends Fragment {
                                 _field54.setText(Double.toString(apiResponse.get(4).getP20min()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 5");
+                                _field51.setVisibility(View.INVISIBLE);
+                                _field52.setVisibility(View.INVISIBLE);
+                                _field53.setVisibility(View.INVISIBLE);
+                                _field54.setVisibility(View.INVISIBLE);
                                 _deleteButton5.setVisibility(View.INVISIBLE);
                             }
                             break;
                         case "running":
                             System.out.println("Entro en running");
 
-                            System.out.println("Primer valor: " + Double.toString(apiResponse.get(0).getVat()));
-                            System.out.println("Primer valor: " + Double.toString(apiResponse.get(0).getVo2max()));
-                            System.out.println("Primer valor: " + Double.toString(apiResponse.get(0).getMavVo2max()));
+                            _header1.setText("Vo2max");
+                            _header2.setText("Vat");
+                            _header3.setText("Mavvo2max");
+                            _header4.setVisibility(View.INVISIBLE);
+
+
+                            _field14.setVisibility(View.INVISIBLE);
+                            _field24.setVisibility(View.INVISIBLE);
+                            _field34.setVisibility(View.INVISIBLE);
+                            _field44.setVisibility(View.INVISIBLE);
+                            _field54.setVisibility(View.INVISIBLE);
                             discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "running";
 
                             try {
@@ -667,6 +739,10 @@ public class ManageTasksFragment extends Fragment {
 
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 1");
+                                _field11.setVisibility(View.INVISIBLE);
+                                _field12.setVisibility(View.INVISIBLE);
+                                _field13.setVisibility(View.INVISIBLE);
+                                _field14.setVisibility(View.INVISIBLE);
                                 _deleteButton1.setVisibility(View.INVISIBLE);
                             }
 
@@ -676,6 +752,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field23.setText(Double.toString(apiResponse.get(1).getMavVo2max()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 2");
+                                _field21.setVisibility(View.INVISIBLE);
+                                _field22.setVisibility(View.INVISIBLE);
+                                _field23.setVisibility(View.INVISIBLE);
+                                _field24.setVisibility(View.INVISIBLE);
                                 _deleteButton2.setVisibility(View.INVISIBLE);
                             }
 
@@ -685,6 +765,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field33.setText(Double.toString(apiResponse.get(2).getMavVo2max()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 3");
+                                _field31.setVisibility(View.INVISIBLE);
+                                _field32.setVisibility(View.INVISIBLE);
+                                _field33.setVisibility(View.INVISIBLE);
+                                _field34.setVisibility(View.INVISIBLE);
                                 _deleteButton3.setVisibility(View.INVISIBLE);
                             }
 
@@ -695,6 +779,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field43.setText(Double.toString(apiResponse.get(3).getMavVo2max()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 4");
+                                _field41.setVisibility(View.INVISIBLE);
+                                _field42.setVisibility(View.INVISIBLE);
+                                _field43.setVisibility(View.INVISIBLE);
+                                _field44.setVisibility(View.INVISIBLE);
                                 _deleteButton4.setVisibility(View.INVISIBLE);
                             }
 
@@ -704,20 +792,53 @@ public class ManageTasksFragment extends Fragment {
                                 _field53.setText(Double.toString(apiResponse.get(4).getMavVo2max()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 5");
+                                _field51.setVisibility(View.INVISIBLE);
+                                _field52.setVisibility(View.INVISIBLE);
+                                _field53.setVisibility(View.INVISIBLE);
+                                _field54.setVisibility(View.INVISIBLE);
                                 _deleteButton5.setVisibility(View.INVISIBLE);
                             }
                             break;
                         case "swimming":
+                            System.out.println("Seteo los campos de swimming!");
                             discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "swimming";
                             System.out.println("Entro en swimming");
+
+                            _header1.setText("Lactate Threshold");
+                            _header2.setText("ANA Threshold");
+                            _header3.setText("Index ANAT");
+                            _header4.setText("Index LT");
+                            _header4.setVisibility(View.VISIBLE);
+
+
+                            _field14.setVisibility(View.VISIBLE);
+                            _field24.setVisibility(View.VISIBLE);
+                            _field34.setVisibility(View.VISIBLE);
+                            _field44.setVisibility(View.VISIBLE);
+                            _field54.setVisibility(View.VISIBLE);
+
+                            _field11.setText("p6s");
+                            _field12.setText("p1m");
+                            _field13.setText("p6m");
+                            _field14.setText("p20m");
                             try {
                                 _field11.setText("" + apiResponse.get(0).getLactateThreshold());
                                 _field12.setText(Double.toString(apiResponse.get(0).getAnaThreshold()));
                                 _field13.setText(Double.toString(apiResponse.get(0).getIndexANAT()));
                                 _field14.setText(Double.toString(apiResponse.get(0).getIndexLT()));
 
+                                System.out.println(_field11.getText());
+                                System.out.println(_field12.getText());
+                                System.out.println(_field13.getText());
+                                System.out.println(_field14.getText());
+
+
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 1");
+                                _field11.setVisibility(View.INVISIBLE);
+                                _field12.setVisibility(View.INVISIBLE);
+                                _field13.setVisibility(View.INVISIBLE);
+                                _field14.setVisibility(View.INVISIBLE);
                                 _deleteButton1.setVisibility(View.INVISIBLE);
                             }
 
@@ -728,6 +849,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field24.setText(Double.toString(apiResponse.get(1).getIndexLT()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 2");
+                                _field21.setVisibility(View.INVISIBLE);
+                                _field22.setVisibility(View.INVISIBLE);
+                                _field23.setVisibility(View.INVISIBLE);
+                                _field24.setVisibility(View.INVISIBLE);
                                 _deleteButton2.setVisibility(View.INVISIBLE);
                             }
 
@@ -738,6 +863,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field34.setText(Double.toString(apiResponse.get(2).getIndexLT()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 3");
+                                _field31.setVisibility(View.INVISIBLE);
+                                _field32.setVisibility(View.INVISIBLE);
+                                _field33.setVisibility(View.INVISIBLE);
+                                _field34.setVisibility(View.INVISIBLE);
                                 _deleteButton3.setVisibility(View.INVISIBLE);
                             }
 
@@ -749,6 +878,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field44.setText(Double.toString(apiResponse.get(3).getIndexLT()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 4");
+                                _field41.setVisibility(View.INVISIBLE);
+                                _field42.setVisibility(View.INVISIBLE);
+                                _field43.setVisibility(View.INVISIBLE);
+                                _field44.setVisibility(View.INVISIBLE);
                                 _deleteButton4.setVisibility(View.INVISIBLE);
                             }
 
@@ -759,6 +892,10 @@ public class ManageTasksFragment extends Fragment {
                                 _field54.setText(Double.toString(apiResponse.get(4).getIndexLT()));
                             } catch (Exception e) {
                                 System.out.println("Ha fallado en el 5");
+                                _field51.setVisibility(View.INVISIBLE);
+                                _field52.setVisibility(View.INVISIBLE);
+                                _field53.setVisibility(View.INVISIBLE);
+                                _field54.setVisibility(View.INVISIBLE);
                                 _deleteButton5.setVisibility(View.INVISIBLE);
                             }
                             break;
@@ -816,6 +953,8 @@ public class ManageTasksFragment extends Fragment {
     private void decreaseOffset() {
         if (this.offset - this.limit > 0) {
             this.offset = this.offset - this.limit;
+        } else {
+            _previousButton.setEnabled(false);
         }
         System.out.println("Offset despues" + this.offset);
     }
