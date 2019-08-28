@@ -817,10 +817,6 @@ public class ManageTasksFragment extends Fragment {
                             _field44.setVisibility(View.VISIBLE);
                             _field54.setVisibility(View.VISIBLE);
 
-                            _field11.setText("p6s");
-                            _field12.setText("p1m");
-                            _field13.setText("p6m");
-                            _field14.setText("p20m");
                             try {
                                 _field11.setText("" + apiResponse.get(0).getLactateThreshold());
                                 _field12.setText(Double.toString(apiResponse.get(0).getAnaThreshold()));
