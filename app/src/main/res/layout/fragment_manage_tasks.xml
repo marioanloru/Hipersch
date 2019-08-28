@@ -79,7 +79,7 @@
             >
 
             <TextView
-                android:id="@+id/1_1"
+                android:id="@+id/field1_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/1_2"
+                android:id="@+id/field1_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/1_3"
+                android:id="@+id/field1_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="8dp"
@@ -107,7 +107,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/1_4"
+                android:id="@+id/field1_4"
                 android:text="5.2"
                 android:visibility="invisible"
                 android:layout_width="match_parent"
@@ -133,7 +133,7 @@
             >
 
             <TextView
-                android:id="@+id/2_1"
+                android:id="@+id/field2_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/2_2"
+                android:id="@+id/field2_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/2_3"
+                android:id="@+id/field2_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/2_4"
+                android:id="@+id/field2_4"
                 android:text="5.2"
                 android:visibility="invisible"
                 android:layout_width="match_parent"
@@ -186,7 +186,7 @@
             >
 
             <TextView
-                android:id="@+id/3_1"
+                android:id="@+id/field3_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/3_2"
+                android:id="@+id/field3_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -204,7 +204,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/3_3"
+                android:id="@+id/field3_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -214,7 +214,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/3_3"
+                android:id="@+id/field3_4"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
             >
 
             <TextView
-                android:id="@+id/4_1"
+                android:id="@+id/field4_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/4_2"
+                android:id="@+id/field4_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/4_3"
+                android:id="@+id/field4_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/4_4"
+                android:id="@+id/field4_4"
                 android:id="@+id/3_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
@@ -292,7 +292,7 @@
             >
 
             <TextView
-                android:id="@+id/5_1"
+                android:id="@+id/field5_1"
                 android:text="3.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/5_2"
+                android:id="@+id/field5_2"
                 android:text="7.5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -310,7 +310,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/5_3"
+                android:id="@+id/field5_3"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -321,7 +321,7 @@
                 android:layout_column="1" />
 
             <TextView
-                android:id="@+id/5_4"
+                android:id="@+id/field5_4"
                 android:text="5.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
