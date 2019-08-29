@@ -35,10 +35,10 @@
                 android:text="Training zone:"
                 android:textSize="32dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/description"
                 app:layout_constraintEnd_toStartOf="@+id/trainingZone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/trainingZoneTag"
                 app:layout_constraintVertical_bias="0.729" />
 
             <TextView
@@ -47,19 +47,27 @@
                 android:layout_height="wrap_content"
                 android:text="att"
                 android:textStyle="bold"
+                android:textSize="32dp"
+                android:textAllCaps="true"
                 app:layout_constraintStart_toEndOf="@+id/trainingZoneText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/description"
+                app:layout_constraintBottom_toTopOf="@+id/trainingZoneTag"
             />
 
 
-            <!--<TextView
+            <TextView
                 android:id="@+id/trainingZoneTag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Subtitulo"
-                android:layout_marginTop="10dp"/>-->
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/trainingZoneText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+            />
 
             <TextView
                 android:id="@+id/description"
@@ -69,7 +77,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/trainingZone"
+                app:layout_constraintTop_toBottomOf="@+id/trainingZoneTag"
 
 
             />
