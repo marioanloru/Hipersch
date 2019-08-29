@@ -35,8 +35,8 @@ public interface ApiService {
                                 @Field("password") String password);
 
     @FormUrlEncoded
-    @POST("user/login/trainer")
-    Call<ApiResponse> userLogin(@Field("email") String email,
+    @POST("user/login")
+    Call<ApiResponse> userLoginTrainer(@Field("email") String email,
                                 @Field("password") String password,
                                 @Field("athlete") String athlete);
 
@@ -52,7 +52,7 @@ public interface ApiService {
                                    @Field("role") String role);
 
     @GET("user/athletes")
-    Call<ApiResponse> getUserAthletes(@Header("Authorization") String token);
+    Call<List<ApiResponse>> getUserAthletes(@Header("Authorization") String token);
 
 
     //  Running routes

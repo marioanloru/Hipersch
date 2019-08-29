@@ -16,6 +16,7 @@ public class ApiResponse {
     private String trainingZoneTwoHundred;
     private String trainingZoneFourHundred;
     private String testId;
+    private String email;
 
     //  Cycling
     private float p6sec;
@@ -42,7 +43,8 @@ public class ApiResponse {
     }
     public String getMessage() { return this.message; }
     public String getUserRole() { return this.role; }
-    public ArrayList<String> getAthletes() { return this.athletes; }
+    public String getEmail() { return this.email; };
+    //public ArrayList<String> getAthletes() { return this.athletes; }
 
     public int getHeight () { return this.height; }
     public int getBodyWeight() { return this.bodyWeight; }

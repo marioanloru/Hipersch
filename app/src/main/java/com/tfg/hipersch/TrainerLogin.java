@@ -3,6 +3,7 @@ package com.tfg.hipersch;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
@@ -28,50 +30,38 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TrainerLogin extends AppCompatActivity {
-  public static final String ATHLETE = "hipersch.ATHLETE";
-public static final String EMAIL = "hipersch.EMAIL";
-public static final String PASSWORD = "hipersch.PASSWORD";
-  private String selectedAthlete;
-  private String email;
-  private String password;
-
     @BindView(R.id.spinner) Spinner _athleteSpinner;
     @BindView(R.id.progress_bar) ProgressBar _progressBar;
     @BindView(R.id.finish_button) MaterialButton _finishButton;
 
+    public static final String ATHLETE = "hipersch.ATHLETE";
+    public static final String EMAIL = "hipersch.EMAIL";
+    public static final String PASSWORD = "hipersch.PASSWORD";
+    private String email;
+    private String password;
+    private ArrayList<String> athletes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("TRAINER LOGIN!!!");
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
-        setContentView(R.layout.activity_sign_up_personal);
+        setContentView(R.layout.activity_trainer_login);
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        email = intent.getStringExtra(SignUpActivity.EMAIL);
-        password = intent.getStringExtra(SignUpActivity.PASSWORD);
+        this.email = intent.getStringExtra(LoginActivity.EMAIL);
+        this.password = intent.getStringExtra(LoginActivity.PASSWORD);
+        System.out.println("Email y contrasenia!!!" + email + password);
 
         //email =
         //password =
 
-        ArrayList<String> athletes = new ArrayList<>();
-        athletes.add("elprimeratleta@gmail.com");
-        athletes.add("elsegundoatleta@gmail.com");
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_spinner_item,
-                        athletes);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        _athleteSpinner.setAdapter(adapter);
-
+        getAthletes();
         _athleteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-              selectedAthlete = _athleteSpinner.getSelectedItem().toString();
-              if (validate()) {
-                next(selectedItemView);
-              }
+              //selectedAthlete = _athleteSpinner.getSelectedItem().toString();
             }
 
             @Override
@@ -90,13 +80,15 @@ public static final String PASSWORD = "hipersch.PASSWORD";
     }
 
   public void next(View v) {
-    Intent intent = new Intent(v.getContext(), MainActivity.class);
+        System.out.println("Next!!!");
+    /*Intent intent = new Intent(v.getContext(), MainActivity.class);
     intent.putExtra(ATHLETE, this.selectedAthlete);
-    startActivity(intent);
+    startActivity(intent);*/
   }
 
   public boolean validate() {
-    String sHeight = this.selectedAthlete;
+        return true;
+    /*String sHeight = this.selectedAthlete;
     boolean valid = true;
     if (sHeight.isEmpty()) {
         valid = false;
@@ -104,10 +96,12 @@ public static final String PASSWORD = "hipersch.PASSWORD";
         //_athleteSpinner.setsetError("This field cannot be empty");
     }
 
-    return valid;
+    return valid;*/
   }
 
   public void sendAthlete(View v) {
+        System.out.print("En send athlete!");
+
       if (!validate()) {
           //onLoginFailed();
           hideProgress();
@@ -118,13 +112,15 @@ public static final String PASSWORD = "hipersch.PASSWORD";
       showProgress();
 
       Intent intent = getIntent();
-      String email = intent.getStringExtra(SignUpActivity.EMAIL);
-      String password = intent.getStringExtra(SignUpActivity.PASSWORD);
-      String athlete = "marioanloru@gmail.com";
+      String email = this.email;
+      String password = this.password;
+      String athlete = _athleteSpinner.getSelectedItem().toString();
+
+      System.out.print("----------->" + email + password + athlete);
 
       //  Login
       ApiService apiService = ServiceGenerator.createService(ApiService.class);
-      Call<ApiResponse> call = apiService.userLogin(email, password, athlete);
+      Call<ApiResponse> call = apiService.userLoginTrainer(email, password, athlete);
 
       call.enqueue(new Callback<ApiResponse>() {
           @Override
@@ -148,14 +144,9 @@ public static final String PASSWORD = "hipersch.PASSWORD";
 
     public void onLoginSuccess(View v, ApiResponse response) {
         System.out.println("Login trainer correcto!!");
-        /*TokenManager.setToken(v.getContext(),response.getToken());
-            Intent intent = new Intent(v.getContext(), MainActivity.class);
-            if (response.getUserRole() == "trainer") {
-                intent = new Intent(v.getContext(), TrainerLogin.class);
-                intent.putExtra(EMAIL, _emailText.getText().toString());
-                intent.putExtra(PASSWORD, _passwordText.getText().toString());
-            }
-            startActivity(intent);*/
+        TokenManager.setToken(v.getContext(),response.getToken());
+        Intent intent = new Intent(v.getContext(), MainActivity.class);
+        startActivity(intent);
     }
 
     public void onLoginFailed() {
@@ -175,4 +166,39 @@ public static final String PASSWORD = "hipersch.PASSWORD";
       //_registerMessage.setVisibility(View.VISIBLE);
   }
 
+  public void getAthletes() {
+        System.out.println("GET ATHLETES!!!!!!");
+      TrainerLogin that = this;
+      ApiService apiService = ServiceGenerator.createService(ApiService.class);
+      Call<List<ApiResponse>> call = apiService.getUserAthletes("Bearer " + TokenManager.getToken(this));
+
+      call.enqueue(new Callback<List<ApiResponse>>() {
+          @Override
+          public void onResponse(Call<List<ApiResponse>> call, Response<List<ApiResponse>> response) {
+
+              List<ApiResponse> apiResponse = response.body();
+              ArrayList<String> athletes = new ArrayList<>();
+              for (int i = 0; i < apiResponse.size(); i += 1) {
+                  System.out.println(apiResponse.get(i).getEmail());
+                  athletes.add(apiResponse.get(i).getEmail());
+              }
+
+              System.out.println("------___-" + athletes.get(0));
+              ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                      (that, android.R.layout.simple_spinner_item,
+                              athletes);
+              // Specify the layout to use when the list of choices appears
+              adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+              // Apply the adapter to the spinner
+              _athleteSpinner.setAdapter(adapter);
+              that.athletes = athletes;
+          }
+
+          @Override
+          public void onFailure(Call<List<ApiResponse>> call, Throwable t) {
+              System.out.println("HA PETADO!!!");
+              Log.d("Error:", t.getMessage());
+          }
+      });
+  }
 }

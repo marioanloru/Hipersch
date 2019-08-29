@@ -124,18 +124,16 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess(View v, ApiResponse response) {
         TokenManager.setToken(v.getContext(),response.getToken());
         Intent intent = new Intent(v.getContext(), MainActivity.class);
-        if (response.getUserRole() == "trainer") {
+        System.out.println("El rol obtenido!!" + response.getUserRole());
+        if (response.getUserRole().equals("trainer")) {
+            System.out.println("Seteo trainer login!!!");
             intent = new Intent(v.getContext(), TrainerLogin.class);
-            intent.putExtra(EMAIL, _emailText.getText().toString());
-            intent.putExtra(PASSWORD, _passwordText.getText().toString());
         }
 
-        SharedPreferences prefs = v.getContext().getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(EMAIL, _emailText.getText().toString());
-        editor.putString(PASSWORD, _passwordText.getText().toString());
-        editor.apply();
+        intent.putExtra(EMAIL, _emailText.getText().toString());
+        intent.putExtra(PASSWORD, _passwordText.getText().toString());
 
+        System.out.println("He puesto email y password: " + _emailText.getText().toString() + _passwordText.getText().toString());
 
         startActivity(intent);
     }
