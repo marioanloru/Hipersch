@@ -39,6 +39,20 @@
         <item>Twenty minutes</item>
     </string-array>
 
+    <string-array name="swimming_categories">
+        <item>Adult Female Long Distance</item>
+        <item>Adult Female Sprinter</item>
+        <item>Adult Male Long Distance</item>
+        <item>Adult Male Sprinter</item>
+        <item>Junior Female Long Distance</item>
+        <item>Junior Female Sprinter</item>
+        <item>Junior Male Long Distance</item>
+        <item>Junior Male Sprinter</item>
+        <item>Infantile Female</item>
+        <item>Infantile Male</item>
+        <item>Beginner Female</item>
+        <item>Beginner Male</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

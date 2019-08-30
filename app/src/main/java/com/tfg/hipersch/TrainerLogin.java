@@ -44,7 +44,6 @@ public class TrainerLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("TRAINER LOGIN!!!");
         //getSupportActionBar().setDisplayShowTitleEnabled(false);
         setContentView(R.layout.activity_trainer_login);
         ButterKnife.bind(this);
@@ -52,10 +51,7 @@ public class TrainerLogin extends AppCompatActivity {
         Intent intent = getIntent();
         this.email = intent.getStringExtra(LoginActivity.EMAIL);
         this.password = intent.getStringExtra(LoginActivity.PASSWORD);
-        System.out.println("Email y contrasenia!!!" + email + password);
 
-        //email =
-        //password =
 
         getAthletes();
         _athleteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -80,7 +76,6 @@ public class TrainerLogin extends AppCompatActivity {
     }
 
   public void next(View v) {
-        System.out.println("Next!!!");
     /*Intent intent = new Intent(v.getContext(), MainActivity.class);
     intent.putExtra(ATHLETE, this.selectedAthlete);
     startActivity(intent);*/
@@ -100,7 +95,6 @@ public class TrainerLogin extends AppCompatActivity {
   }
 
   public void sendAthlete(View v) {
-        System.out.print("En send athlete!");
 
       if (!validate()) {
           //onLoginFailed();
@@ -115,8 +109,6 @@ public class TrainerLogin extends AppCompatActivity {
       String email = this.email;
       String password = this.password;
       String athlete = _athleteSpinner.getSelectedItem().toString();
-
-      System.out.print("----------->" + email + password + athlete);
 
       //  Login
       ApiService apiService = ServiceGenerator.createService(ApiService.class);
@@ -143,7 +135,6 @@ public class TrainerLogin extends AppCompatActivity {
   }
 
     public void onLoginSuccess(View v, ApiResponse response) {
-        System.out.println("Login trainer correcto!!");
         TokenManager.setToken(v.getContext(),response.getToken());
         Intent intent = new Intent(v.getContext(), MainActivity.class);
         startActivity(intent);
@@ -151,10 +142,10 @@ public class TrainerLogin extends AppCompatActivity {
 
     public void onLoginFailed() {
         System.out.println("El login ha fallado");
-    /*Toast.makeText(getBaseContext(), "Please, try again in a few seconds", Toast.LENGTH_LONG).show();
-    hideProgress();
-    _loginButton.setEnabled(true);*/
-}
+        /*Toast.makeText(getBaseContext(), "Please, try again in a few seconds", Toast.LENGTH_LONG).show();
+        hideProgress();
+        _loginButton.setEnabled(true);*/
+    }
 
   public void showProgress() {
       _progressBar.setVisibility(View.VISIBLE);
@@ -167,7 +158,6 @@ public class TrainerLogin extends AppCompatActivity {
   }
 
   public void getAthletes() {
-        System.out.println("GET ATHLETES!!!!!!");
       TrainerLogin that = this;
       ApiService apiService = ServiceGenerator.createService(ApiService.class);
       Call<List<ApiResponse>> call = apiService.getUserAthletes("Bearer " + TokenManager.getToken(this));
@@ -179,11 +169,9 @@ public class TrainerLogin extends AppCompatActivity {
               List<ApiResponse> apiResponse = response.body();
               ArrayList<String> athletes = new ArrayList<>();
               for (int i = 0; i < apiResponse.size(); i += 1) {
-                  System.out.println(apiResponse.get(i).getEmail());
                   athletes.add(apiResponse.get(i).getEmail());
               }
 
-              System.out.println("------___-" + athletes.get(0));
               ArrayAdapter<String> adapter = new ArrayAdapter<String>
                       (that, android.R.layout.simple_spinner_item,
                               athletes);
@@ -196,7 +184,6 @@ public class TrainerLogin extends AppCompatActivity {
 
           @Override
           public void onFailure(Call<List<ApiResponse>> call, Throwable t) {
-              System.out.println("HA PETADO!!!");
               Log.d("Error:", t.getMessage());
           }
       });

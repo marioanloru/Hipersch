@@ -49,12 +49,10 @@ public class MainActivity extends AppCompatActivity
         try {
             String athlete = intent.getStringExtra(TrainerLogin.ATHLETE);
         } catch (Exception e) {
-            System.out.println("No es un entrenador");
         }
         //  get token from app shared info
         showMainFragment();
 
-        System.out.println("Getting user info");
         //  getUserData(TokenManager.getToken(this).toString());
 
         _currentModeGroup.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
@@ -133,7 +131,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setCurrentMode(String mode, boolean isChecked) {
-        System.out.println("--------Seteo currento mode: " + mode);
         if (isChecked) {
             SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();

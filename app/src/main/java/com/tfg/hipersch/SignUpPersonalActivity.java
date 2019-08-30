@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -39,6 +41,8 @@ public class SignUpPersonalActivity extends AppCompatActivity {
     @BindView(R.id.role_group) RadioGroup _roleGroup;
     @BindView(R.id.finish_button) MaterialButton _finishButton;
     @BindView(R.id.progress_bar) ProgressBar _progressBar;
+    @BindView(R.id.categories) Spinner _categories;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,13 @@ public class SignUpPersonalActivity extends AppCompatActivity {
         lastName = intent.getStringExtra(SignUpActivity.LASTNAME);
         email = intent.getStringExtra(SignUpActivity.EMAIL);
         password = intent.getStringExtra(SignUpActivity.PASSWORD);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.swimming_categories, android.R.layout.simple_spinner_dropdown_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        _categories.setAdapter(adapter);
 
         _finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,10 +103,12 @@ public class SignUpPersonalActivity extends AppCompatActivity {
         String role = roleSelected();
         String height = _heightField.getText().toString();
         String bodyWeight = _weightField.getText().toString();
+        String swimmingCategory = _categories.getSelectedItem().toString();
+
 
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.userRegister(email, password, firstName,
-                lastName, bodyWeight, height, gender, role);
+                lastName, bodyWeight, height, gender, role, swimmingCategory);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override

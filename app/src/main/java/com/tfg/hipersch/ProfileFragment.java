@@ -165,7 +165,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onButtonChecked(MaterialButtonToggleGroup group,
                                         int checkedId, boolean isChecked) {
-                System.out.println("Evento captado, hay que actualizar el grafo");
                 updateLoading(true);
                 getUserTestsData();
                 updateLoading(false);
@@ -182,7 +181,6 @@ public class ProfileFragment extends Fragment {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     updateHeight(v, getToken());
-                    System.out.println("Se ha pulsado enter!!!");
                 }
                 return false;
             }
@@ -190,12 +188,10 @@ public class ProfileFragment extends Fragment {
 
         _weightField.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                System.out.println("Weight field key pressed");
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     updateWeight(v, getToken());
-                    System.out.println("Se ha pulsado enter!!!");
                 }
                 return false;
             }
@@ -288,7 +284,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateHeight(View v, String token) {
-        System.out.println("Update height!!");
 
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.updateUserData("Bearer " + token,
@@ -316,7 +311,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateWeight(View v, String token) {
-        System.out.println("Update weight!!");
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.updateUserData("Bearer " + token,
                 _heightField.getText().toString(), _weightField.getText().toString());
@@ -325,7 +319,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("Todo okk!!" + response.body());
                     Toast toast = Toast.makeText(v.getContext(),
                             "Personal data succesfully updated", Toast.LENGTH_LONG);
                     toast.show();
@@ -387,7 +380,6 @@ public class ProfileFragment extends Fragment {
         String token = "";
         try {
             token = ((MainActivity)getActivity()).getToken();
-            System.out.println("Token que se envia!" + token);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -397,7 +389,6 @@ public class ProfileFragment extends Fragment {
     private void getUserTestsData() {
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         String currentMode = getCurrentMode();
-        System.out.println("Get user tests data, current mode --> " + currentMode);
         String limit = "3";
         String offset = "0";
         Call<List<ApiResponse>> call = null;
@@ -420,23 +411,14 @@ public class ProfileFragment extends Fragment {
             public void onResponse(Call<List<ApiResponse>> call, Response<List<ApiResponse>> response) {
                 if (response.isSuccessful()) {
                     List<ApiResponse> apiResponse = response.body();
-                    System.out.println("-------Api response: " + apiResponse.toString());
 
                     updateLoading(false);
+                    try {
+                        loadGraphData(apiResponse);
+                    } catch (Exception e) {
 
-                    switch (getCurrentMode()) {
-                        case "cycling":
-                            loadGraphData(apiResponse);
-                            break;
-                        case "running":
-                            loadGraphData(apiResponse);
-                            break;
-                        case "swimming":
-                            loadGraphData(apiResponse);
-                            break;
-                        default:
-                            break;
                     }
+
                 } else {
                     System.out.println("-----Something failed");
                 }
@@ -444,7 +426,6 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<ApiResponse>> call, Throwable t) {
-                System.out.println("-------- Ha fallado!" + t.getMessage());
                 Log.d("Error:", t.getMessage());
                 //onLoginFailed();
             }
@@ -455,8 +436,6 @@ public class ProfileFragment extends Fragment {
         String currentMode = getCurrentMode();
         ArrayList<RadarEntry> entries = new ArrayList<>();
 
-        System.out.println("El modo es: " + currentMode + entries.toString());
-        System.out.println("La respuesta de la api: :" + apiResponse.toString());
 
         ArrayList<RadarEntry> entries1 = new ArrayList<>();
         ArrayList<RadarEntry> entries2= new ArrayList<>();
@@ -478,17 +457,14 @@ public class ProfileFragment extends Fragment {
                 entries1.add(new RadarEntry((float)apiResponse.get(0).getVo2max()));
                 entries1.add(new RadarEntry((float)apiResponse.get(0).getMavVo2max()));
                 entries1.add(new RadarEntry((float)apiResponse.get(0).getVat()));
-                System.out.println("Entries 1 ->" + entries1.toString());
 
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getVo2max()));
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getMavVo2max()));
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getVat()));
-                System.out.println("Entries 2 ->" + entries2.toString());
 
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getVo2max()));
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getMavVo2max()));
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getVat()));
-                System.out.println("Entries 3 ->" + entries3.toString());
                 break;
             case "swimming":
                 labels.add("Index ANAT");
@@ -500,19 +476,16 @@ public class ProfileFragment extends Fragment {
                 entries1.add(new RadarEntry((float)apiResponse.get(0).getIndexLT()));
                 entries1.add(new RadarEntry((float)apiResponse.get(0).getAnaThreshold()));
                 entries1.add(new RadarEntry((float)apiResponse.get(0).getLactateThreshold()));
-                System.out.println("Entries 1 ->" + entries1.toString());
 
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getIndexANAT()));
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getIndexLT()));
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getAnaThreshold()));
                 entries2.add(new RadarEntry((float)apiResponse.get(1).getLactateThreshold()));
-                System.out.println("Entries 2 ->" + entries2.toString());
 
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getIndexANAT()));
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getIndexLT()));
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getAnaThreshold()));
                 entries3.add(new RadarEntry((float)apiResponse.get(2).getLactateThreshold()));
-                System.out.println("Entries 3 ->" + entries3.toString());
                 break;
             case "cycling":
                 labels.add("p6sec");
@@ -543,10 +516,6 @@ public class ProfileFragment extends Fragment {
                     }
                 }
 
-                System.out.println("Samples 1" + samplesP6sec.toString());
-                System.out.println("Samples 2" + samplesP1min.toString());
-                System.out.println("Samples 3" + samplesP6min.toString());
-                System.out.println("Samples 4" + samplesP20min.toString());
 
                 for (int i = 0; i < samplesP6sec.size(); i += 1) {
                     if (i == 0) entries1.add(new RadarEntry((float)samplesP6sec.get(i)));
@@ -587,9 +556,6 @@ public class ProfileFragment extends Fragment {
             e.printStackTrace();
         }
 
-        System.out.println("Entries 1 ---> " + entries1.toString());
-        System.out.println("Entries 2 ---> " + entries2.toString());
-        System.out.println("Entries 3 ---> " + entries3.toString());
 
         RadarDataSet set1 = new RadarDataSet(entries1, outputFormat.format(dateParsed1));
         RadarDataSet set2 = new RadarDataSet(entries2, outputFormat.format(dateParsed2));
@@ -656,7 +622,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateLoading(Boolean loading) {
-        System.out.println("Cargando!! " + loading.toString());
         if (loading) {
             _progressBar.setVisibility(View.VISIBLE);
             _height.setVisibility(View.INVISIBLE);

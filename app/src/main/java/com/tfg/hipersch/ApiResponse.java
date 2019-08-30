@@ -15,6 +15,8 @@ public class ApiResponse {
     private String trainingZoneTag;
     private String trainingZoneTwoHundred;
     private String trainingZoneFourHundred;
+
+
     private String testId;
     private String email;
 
@@ -36,7 +38,14 @@ public class ApiResponse {
     private double indexANAT;
     private double anaThreshold;
     private double lactateThreshold;
-    //  private double
+
+    //  Progress functionalities
+    private double min;
+    private double max;
+    private double minTwoHundred;
+    private double maxTwoHundred;
+    private double minFourHundred;
+    private double maxFourHundred;
 
     public String getToken() {
         return this.token;
@@ -76,6 +85,15 @@ public class ApiResponse {
 
     public String getTestId() { return this.testId; }
     public String getDate() { return this.date; };
+
+    //  Progress
+    public double getMax() { return this.max; }
+    public double getMaxTwoHundred() { return this.maxTwoHundred; }
+    public double getMaxFourHundred() { return this.maxFourHundred; }
+
+    public double getMin() { return this.min; }
+    public double getMinTwoHundred() { return this.minTwoHundred; }
+    public double getMinFourHundred() { return this.minFourHundred; }
 
     public void setToken(String token) {
         this.token = token;

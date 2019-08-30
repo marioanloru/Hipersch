@@ -91,7 +91,6 @@ public class ScheduleFragment extends Fragment {
                     @Override
                     public void onButtonChecked(MaterialButtonToggleGroup group,
                                                 int checkedId, boolean isChecked) {
-                        System.out.println("Evento captado, hay que actualizar el grafo");
                         getTrainingZone();
 
                     }
@@ -154,7 +153,6 @@ public class ScheduleFragment extends Fragment {
         String token = "";
         try {
             token = ((MainActivity)getActivity()).getToken();
-            System.out.println("Token que se envia!" + token);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -231,13 +229,11 @@ public class ScheduleFragment extends Fragment {
                             _trainingZone.setText(response.body().getTrainingZoneTwoHundred());
                             _trainingZoneText2.setText("Training Zone 400m:");
                             _trainingZone2.setText(response.body().getTrainingZoneFourHundred());
-                            System.out.println(response.body().getTrainingZoneFourHundred());
 
                             break;
                         case "cycling":
                             trainingZone = response.body().getTrainingZone();
                             _trainingZone.setText(trainingZone);
-                            System.out.println("TAG!!!! " + response.body().getTrainingZoneTag());
                             switch (trainingZone) {
                                 case "0":
                                     _trainingZoneTag.setText("Active Recovery");

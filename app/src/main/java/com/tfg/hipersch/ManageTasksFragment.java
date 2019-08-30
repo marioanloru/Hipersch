@@ -138,7 +138,6 @@ public class ManageTasksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        System.out.println("On create view manage tasks");
         View view = inflater.inflate(R.layout.fragment_manage_tasks, container, false);
         ButterKnife.bind(this, view);
         this.limit = 5;
@@ -157,7 +156,6 @@ public class ManageTasksFragment extends Fragment {
                     @Override
                     public void onButtonChecked(MaterialButtonToggleGroup group,
                                                 int checkedId, boolean isChecked) {
-                        System.out.println("Evento captado, hay que actualizar el grafo");
                         _previousButton.setEnabled(false);
                         getUserTestsData();
 
@@ -167,11 +165,9 @@ public class ManageTasksFragment extends Fragment {
         _nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //System.out.println("Boton clickado: " + _firstButton.getText());
                 _previousButton.setEnabled(true);
                 increaseOffset();
                 getUserTestsData();
-                System.out.println("----------------------" + _field11.getVisibility() + _field21.getVisibility());
                 if (_field21.getVisibility() == View.INVISIBLE) {
                     _nextButton.setEnabled(false);
                 }
@@ -181,7 +177,6 @@ public class ManageTasksFragment extends Fragment {
         _previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Pagino hacia atras!");
                 _nextButton.setEnabled(true);
                 decreaseOffset();
                 getUserTestsData();
@@ -196,7 +191,6 @@ public class ManageTasksFragment extends Fragment {
         _deleteButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Delete boton 1: " + discipline1);
                 switch (discipline1) {
                     case "running":
                         ApiService apiService = ServiceGenerator.createService(ApiService.class);
@@ -205,7 +199,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response1.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -223,7 +216,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response1.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -238,11 +230,9 @@ public class ManageTasksFragment extends Fragment {
                         apiService = ServiceGenerator.createService(ApiService.class);
                         call = apiService.deleteSwimmingTest("Bearer " + getToken(), response1.getTestId());
 
-                        System.out.println("Llamo a deeteswimming");
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response1.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -269,7 +259,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response2.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -287,7 +276,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response2.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -305,7 +293,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response2.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -333,7 +320,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response3.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -351,7 +337,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response3.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -369,7 +354,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response3.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -397,7 +381,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response4.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -415,7 +398,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response4.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -433,7 +415,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response4.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -461,7 +442,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response5.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -479,7 +459,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response5.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -497,7 +476,6 @@ public class ManageTasksFragment extends Fragment {
                         call.enqueue(new Callback<ApiResponse>() {
                             @Override
                             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                                System.out.println("He borrado con testid: " + response5.getTestId());
                                 showDeleteSuccess();
                             }
 
@@ -571,25 +549,20 @@ public class ManageTasksFragment extends Fragment {
     private void getUserTestsData() {
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         String currentMode = getCurrentMode();
-        System.out.println("Get user tests data, current mode --> " + currentMode);
 
         Call<List<ApiResponse>> call = null;
-        System.out.println("Peticion con limit y offset:: " + Integer.toString(this.limit) + Integer.toString(this.offset));
         switch (currentMode) {
             case "cycling":
-                System.out.println("Recupero de cycling");
 
                 call = apiService.getCyclingTests("Bearer " + getToken(),
                         Integer.toString(this.limit), Integer.toString(this.offset));
                 
                 break;
             case "running":
-                System.out.println("Recupero de running");
                 call = apiService.getRunningTests("Bearer " + getToken(),
                         Integer.toString(this.limit), Integer.toString(this.offset));
                 break;
             case "swimming":
-                System.out.println("Recupero de swimming");
                 call = apiService.getSwimmingTests("Bearer " + getToken(),
                         Integer.toString(this.limit), Integer.toString(this.offset));
                 break;
@@ -602,15 +575,12 @@ public class ManageTasksFragment extends Fragment {
             public void onResponse(Call<List<ApiResponse>> call, Response<List<ApiResponse>> response) {
                 if (response.isSuccessful()) {
                     List<ApiResponse> apiResponse = response.body();
-                    System.out.println("-------Api response: " + apiResponse.toString());
 
                     String modoActual = getCurrentMode();
 
-                    System.out.println("Modo actual: " + modoActual);
                     updateLoading(false);
                     updateResponses(apiResponse);
                     //  Inicializar campos aqui
-                    System.out.println("Modo al actualizar" + modoActual);
                     _field11.setVisibility(View.VISIBLE);
                     _field21.setVisibility(View.VISIBLE);
                     _field31.setVisibility(View.VISIBLE);
@@ -650,7 +620,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field14.setText(Double.toString(apiResponse.get(0).getP20min()));
 
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 1");
                                 _field11.setVisibility(View.INVISIBLE);
                                 _field12.setVisibility(View.INVISIBLE);
                                 _field13.setVisibility(View.INVISIBLE);
@@ -664,7 +633,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field23.setText(Double.toString(apiResponse.get(1).getP6min()));
                                 _field24.setText(Double.toString(apiResponse.get(1).getP20min()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 2");
                                 _field21.setVisibility(View.INVISIBLE);
                                 _field22.setVisibility(View.INVISIBLE);
                                 _field23.setVisibility(View.INVISIBLE);
@@ -678,7 +646,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field33.setText(Double.toString(apiResponse.get(2).getP6min()));
                                 _field34.setText(Double.toString(apiResponse.get(2).getP20min()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 3");
                                 _field31.setVisibility(View.INVISIBLE);
                                 _field32.setVisibility(View.INVISIBLE);
                                 _field33.setVisibility(View.INVISIBLE);
@@ -693,7 +660,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field43.setText(Double.toString(apiResponse.get(3).getP6min()));
                                 _field44.setText(Double.toString(apiResponse.get(3).getP20min()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 4");
                                 _field41.setVisibility(View.INVISIBLE);
                                 _field42.setVisibility(View.INVISIBLE);
                                 _field43.setVisibility(View.INVISIBLE);
@@ -707,7 +673,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field53.setText(Double.toString(apiResponse.get(4).getP6min()));
                                 _field54.setText(Double.toString(apiResponse.get(4).getP20min()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 5");
                                 _field51.setVisibility(View.INVISIBLE);
                                 _field52.setVisibility(View.INVISIBLE);
                                 _field53.setVisibility(View.INVISIBLE);
@@ -716,7 +681,6 @@ public class ManageTasksFragment extends Fragment {
                             }
                             break;
                         case "running":
-                            System.out.println("Entro en running");
 
                             _header1.setText("Vo2max");
                             _header2.setText("Vat");
@@ -738,7 +702,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field13.setText(Double.toString(apiResponse.get(0).getMavVo2max()));
 
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 1");
                                 _field11.setVisibility(View.INVISIBLE);
                                 _field12.setVisibility(View.INVISIBLE);
                                 _field13.setVisibility(View.INVISIBLE);
@@ -751,7 +714,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field22.setText(Double.toString(apiResponse.get(1).getVo2max()));
                                 _field23.setText(Double.toString(apiResponse.get(1).getMavVo2max()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 2");
                                 _field21.setVisibility(View.INVISIBLE);
                                 _field22.setVisibility(View.INVISIBLE);
                                 _field23.setVisibility(View.INVISIBLE);
@@ -764,7 +726,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field32.setText(Double.toString(apiResponse.get(2).getVo2max()));
                                 _field33.setText(Double.toString(apiResponse.get(2).getMavVo2max()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 3");
                                 _field31.setVisibility(View.INVISIBLE);
                                 _field32.setVisibility(View.INVISIBLE);
                                 _field33.setVisibility(View.INVISIBLE);
@@ -778,7 +739,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field42.setText(Double.toString(apiResponse.get(3).getVo2max()));
                                 _field43.setText(Double.toString(apiResponse.get(3).getMavVo2max()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 4");
                                 _field41.setVisibility(View.INVISIBLE);
                                 _field42.setVisibility(View.INVISIBLE);
                                 _field43.setVisibility(View.INVISIBLE);
@@ -791,7 +751,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field52.setText(Double.toString(apiResponse.get(4).getVo2max()));
                                 _field53.setText(Double.toString(apiResponse.get(4).getMavVo2max()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 5");
                                 _field51.setVisibility(View.INVISIBLE);
                                 _field52.setVisibility(View.INVISIBLE);
                                 _field53.setVisibility(View.INVISIBLE);
@@ -800,9 +759,7 @@ public class ManageTasksFragment extends Fragment {
                             }
                             break;
                         case "swimming":
-                            System.out.println("Seteo los campos de swimming!");
                             discipline1 = discipline2 = discipline3 = discipline4 = discipline5 = "swimming";
-                            System.out.println("Entro en swimming");
 
                             _header1.setText("Lactate Threshold");
                             _header2.setText("ANA Threshold");
@@ -823,14 +780,7 @@ public class ManageTasksFragment extends Fragment {
                                 _field13.setText(Double.toString(apiResponse.get(0).getIndexANAT()));
                                 _field14.setText(Double.toString(apiResponse.get(0).getIndexLT()));
 
-                                System.out.println(_field11.getText());
-                                System.out.println(_field12.getText());
-                                System.out.println(_field13.getText());
-                                System.out.println(_field14.getText());
-
-
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 1");
                                 _field11.setVisibility(View.INVISIBLE);
                                 _field12.setVisibility(View.INVISIBLE);
                                 _field13.setVisibility(View.INVISIBLE);
@@ -844,7 +794,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field23.setText(Double.toString(apiResponse.get(1).getIndexANAT()));
                                 _field24.setText(Double.toString(apiResponse.get(1).getIndexLT()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 2");
                                 _field21.setVisibility(View.INVISIBLE);
                                 _field22.setVisibility(View.INVISIBLE);
                                 _field23.setVisibility(View.INVISIBLE);
@@ -858,7 +807,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field33.setText(Double.toString(apiResponse.get(2).getIndexANAT()));
                                 _field34.setText(Double.toString(apiResponse.get(2).getIndexLT()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 3");
                                 _field31.setVisibility(View.INVISIBLE);
                                 _field32.setVisibility(View.INVISIBLE);
                                 _field33.setVisibility(View.INVISIBLE);
@@ -873,7 +821,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field43.setText(Double.toString(apiResponse.get(3).getIndexANAT()));
                                 _field44.setText(Double.toString(apiResponse.get(3).getIndexLT()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 4");
                                 _field41.setVisibility(View.INVISIBLE);
                                 _field42.setVisibility(View.INVISIBLE);
                                 _field43.setVisibility(View.INVISIBLE);
@@ -887,7 +834,6 @@ public class ManageTasksFragment extends Fragment {
                                 _field53.setText(Double.toString(apiResponse.get(4).getIndexANAT()));
                                 _field54.setText(Double.toString(apiResponse.get(4).getIndexLT()));
                             } catch (Exception e) {
-                                System.out.println("Ha fallado en el 5");
                                 _field51.setVisibility(View.INVISIBLE);
                                 _field52.setVisibility(View.INVISIBLE);
                                 _field53.setVisibility(View.INVISIBLE);
@@ -899,13 +845,11 @@ public class ManageTasksFragment extends Fragment {
                             break;
                     }
                 } else {
-                    System.out.println("-----Something failed");
                 }
             }
 
             @Override
             public void onFailure(Call<List<ApiResponse>> call, Throwable t) {
-                System.out.println("-------- Ha fallado!" + t.getMessage());
                 Log.d("Error:", t.getMessage());
                 //onLoginFailed();
             }
@@ -916,7 +860,6 @@ public class ManageTasksFragment extends Fragment {
         String token = "";
         try {
             token = ((MainActivity)getActivity()).getToken();
-            System.out.println("Token que se envia!" + token);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -924,7 +867,6 @@ public class ManageTasksFragment extends Fragment {
     }
 
     private void updateLoading(Boolean loading) {
-        System.out.println("Escondo progress bar: " + loading.toString());
         /*if (loading) {
             System.out.println("LO PONGO A VISIBLE");
             getView().findViewById(R.id.progress_bar).setVisibility(View.VISIBLE);
@@ -943,7 +885,6 @@ public class ManageTasksFragment extends Fragment {
 
     private void increaseOffset() {
         this.offset = this.offset + this.limit;
-        System.out.println("Offset despues" + this.offset);
     }
 
     private void decreaseOffset() {
@@ -952,7 +893,6 @@ public class ManageTasksFragment extends Fragment {
         } else {
             _previousButton.setEnabled(false);
         }
-        System.out.println("Offset despues" + this.offset);
     }
 
     private void updateResponses(List<ApiResponse> data) {

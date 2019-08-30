@@ -113,7 +113,6 @@ public class TasksFragment extends Fragment {
             public void onButtonChecked(MaterialButtonToggleGroup group,
                                         int checkedId, boolean isChecked) {
                 clearButtons();
-                System.out.println("Evento captado, el id es este " + checkedId);
                 setCurrentModeButtons(getCurrentMode());
                 clearErrorMessages();
 
@@ -123,21 +122,19 @@ public class TasksFragment extends Fragment {
         _firstButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Boton clickado: " + _firstButton.getText());
             }
         });
 
         _editTestsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Hay que mostrar tests para administrarse: ");
             }
         });
 
         _secondButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Segundo boton");
+
             }
         });
 
@@ -145,7 +142,6 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                System.out.println("Envio la tarea: " + getCurrentMode());
                 _sendTest.setEnabled(false);
                 switch (getCurrentMode()) {
                     case "running":
@@ -241,7 +237,6 @@ public class TasksFragment extends Fragment {
 
 
     public void setCurrentModeButtons(String mode) {
-        System.out.println("Modo en set current: " + mode);
         this.currentMode = mode;
         switch (mode) {
             case "cycling":
@@ -250,7 +245,7 @@ public class TasksFragment extends Fragment {
                 _cyclingSpinnerMessage.setVisibility(View.VISIBLE);
                 _cyclingTestTypes.setVisibility(View.VISIBLE);
 
-                _firstButton.setHint("Peak power");
+                _firstButton.setHint("Peak power (W)");
                 break;
             case "running":
                 _firstButton.setVisibility(View.VISIBLE);
@@ -258,7 +253,7 @@ public class TasksFragment extends Fragment {
                 _cyclingSpinnerMessage.setVisibility(View.INVISIBLE);
                 _cyclingTestTypes.setVisibility(View.INVISIBLE);
 
-                _firstButton.setHint("Distance");
+                _firstButton.setHint("Distance (m)");
                 break;
             case "swimming":
                 _firstButton.setVisibility(View.VISIBLE);
@@ -266,8 +261,8 @@ public class TasksFragment extends Fragment {
                 _cyclingSpinnerMessage.setVisibility(View.INVISIBLE);
                 _cyclingTestTypes.setVisibility(View.INVISIBLE);
 
-                _firstButton.setHint("200 meters mark");
-                _secondButton.setHint("400 meters mark");
+                _firstButton.setHint("200 meters mark (s)");
+                _secondButton.setHint("400 meters mark (s)");
                 break;
         }
     }
@@ -309,7 +304,6 @@ public class TasksFragment extends Fragment {
     }
 
     public boolean sendSwimmingTest(String timeTwoHundred, String timeFourHundred) {
-        System.out.println("Envio tarea con estos paramettros 400 200 " + timeFourHundred + timeTwoHundred);
         ApiService apiService = ServiceGenerator.createService(ApiService.class);
         Call<ApiResponse> call = apiService.sendSwimmingTest("Bearer " +
                 TokenManager.getToken(getActivity()),
@@ -321,9 +315,7 @@ public class TasksFragment extends Fragment {
                 if (response.isSuccessful()) {
                     ApiResponse apiResponse = response.body();
                     showSuccesfulMessage();
-                    //System.out.println(apiResponse.getMessage())
                 } else {
-                    System.out.println("Something failed");
                     showErrorMessage("Something went wrong");
 
                 }
